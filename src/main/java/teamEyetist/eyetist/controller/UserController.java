@@ -1,12 +1,8 @@
 package teamEyetist.eyetist.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import teamEyetist.eyetist.entity.User;
-import teamEyetist.eyetist.service.UserServiceImpl;
 import teamEyetist.eyetist.service.UserService;
 
 import java.util.Optional;
@@ -22,25 +18,25 @@ public class UserController {
     }
 
     @PostMapping("user/join")
-    public String joinMember(@RequestParam Long id){
-        Optional<User> userCheck = userService.findUser(id);
+    public String joinMember(@RequestParam String email, @RequestParam String password){
+        Optional<User> userCheck = userService.findUser(email);
 
         if (userCheck.isPresent()) { // 이미 존재하는 이메일
             return "이미 존재하는 이메일입니다.";
         }
         else{ // 회원가입 완료
-
-            return userService.joinUser(id);
+            User user = new User(email, password);
+            return userService.joinUser(user);
         }
     }
 
-    @GetMapping("user/{id}")
-    public String findMember(@PathVariable Long id){
+    @GetMapping("user/{email}")
+    public String findMember(@PathVariable String email){
         //이메일이 존재하지 않을 시 NPE반환
-        Optional<User> user = userService.findUser(id);
+        Optional<User> user = userService.findUser(email);
 
         if (user.isPresent()) { // 이메일 반환
-            return user.get().getId().toString();
+            return user.get().getEmail();
         }
         else{ // 존재하지 않는 이메일
             return "존재하지 않는 이메일입니다.";

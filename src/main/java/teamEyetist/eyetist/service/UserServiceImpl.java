@@ -1,12 +1,9 @@
 package teamEyetist.eyetist.service;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import teamEyetist.eyetist.entity.User;
-import teamEyetist.eyetist.repository.UserRepositoryImpl;
 import teamEyetist.eyetist.repository.UserRepository;
 
 import java.util.Optional;
@@ -22,13 +19,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String joinUser(Long id) {
-        return userRepository.save(id);
+    public String joinUser(User user) {
+        return userRepository.save(user);
     }
 
     @Override
-    public Optional<User> findUser(Long id) {
-        return userRepository.find(id);
+    public Optional<User> findUser(String email) {
+        return userRepository.find(email);
     }
 
     @Override
