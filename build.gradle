@@ -42,7 +42,7 @@ dependencies {
 
 	//Azure blob 스토리지 관련 라이브러리
 	implementation 'com.azure.spring:spring-cloud-azure-starter-storage-blob:4.5.0'
-
+	implementation 'com.azure:azure-identity:1.7.2'
 }
 
 tasks.named('test') {
