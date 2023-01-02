@@ -1,11 +1,19 @@
 package teamEyetist.eyetist;
 
 
+import com.azure.identity.DefaultAzureCredential;
+import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.storage.blob.BlobContainerClient;
+import com.azure.storage.blob.BlobContainerClientBuilder;
+import com.azure.storage.blob.BlobServiceClient;
+import com.azure.storage.blob.BlobServiceClientBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import teamEyetist.eyetist.repository.UserRepository;
 import teamEyetist.eyetist.repository.UserRepositoryImpl;
+import teamEyetist.eyetist.service.AzureService;
+import teamEyetist.eyetist.service.AzureServiceImpl;
 import teamEyetist.eyetist.service.UserService;
 import teamEyetist.eyetist.service.UserServiceImpl;
 import javax.persistence.EntityManager;
@@ -26,4 +34,5 @@ public class AppConfiguration {
     public UserService userService(){
         return new UserServiceImpl(new UserRepositoryImpl(em));
     }
+
 }
