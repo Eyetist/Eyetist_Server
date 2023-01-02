@@ -14,6 +14,7 @@ import teamEyetist.eyetist.service.AzureService;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
+import java.util.Map;
 
 @RestController
 @RequestMapping("blob")
@@ -39,26 +40,23 @@ public class BlobController{
         }
         return "file was updated";
     }
-    @PostMapping("/test")
-    public String writeTest(@RequestPart(value = "file") MultipartFile file) throws IOException{
-        azureService.storeImage(file);
-        System.out.print("파일 업로드 성공");
-        return "200";
+    @PostMapping("/storeImage")
+    public String storeImageFile(@RequestParam MultipartFile file, @RequestParam String containerName, @RequestParam String imageTitle) throws IOException{
+        return azureService.storeImage(file, containerName, imageTitle); // 이미지 url 리턴
     }
 
-    @GetMapping ("delete")
-    public void deleteContainer() {
+    @PostMapping ("/deleteStorage")
+    public void deleteUserStorage(String userId) {
+        azureService.deleteContainer(userId);
+    }
+    @PostMapping("/deleteImage")
+    public void deleteUserImage(@RequestParam String userId, @RequestParam String imageTitle) {
+        azureService.deleteBlob(userId, imageTitle);
+    }
 
-        //Azure에 로그인할 디폴트 크레덴셜
-        DefaultAzureCredential defaultCredential = new DefaultAzureCredentialBuilder().build();
-
-        //Azure에 로그인
-        BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
-                .endpoint("https://eyetiststorage.blob.core.windows.net/")
-                .credential(defaultCredential)
-                .buildClient();
-
-        // Delete the container using the service client
-        blobServiceClient.deleteBlobContainer("test");
+    @PostMapping("/test")
+    public String test(@RequestParam MultipartFile file, @RequestParam String containerName, @RequestParam String imageTitle) throws IOException{
+        azureService.test(file, containerName, imageTitle);
+        return "200";
     }
 }
