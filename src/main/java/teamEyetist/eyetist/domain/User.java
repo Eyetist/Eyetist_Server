@@ -1,4 +1,4 @@
-package teamEyetist.eyetist.entity;
+package teamEyetist.eyetist.domain;
 
 
 import lombok.Getter;

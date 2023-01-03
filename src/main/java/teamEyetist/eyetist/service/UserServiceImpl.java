@@ -3,7 +3,7 @@ package teamEyetist.eyetist.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import teamEyetist.eyetist.entity.User;
+import teamEyetist.eyetist.domain.User;
 import teamEyetist.eyetist.repository.UserRepository;
 
 import java.util.Optional;

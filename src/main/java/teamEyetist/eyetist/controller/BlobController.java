@@ -3,6 +3,7 @@ package teamEyetist.eyetist.controller;
 import com.azure.identity.DefaultAzureCredential;
 import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.storage.blob.*;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.WritableResource;
@@ -31,20 +32,10 @@ public class BlobController{
     public String readBlobFile() throws IOException {
         return StreamUtils.copyToString(this.resource.getInputStream(), Charset.defaultCharset());
     }
-
-
-    @PostMapping("/writeBlobFile")
-    public String writeBlobFile(@RequestPart(value = "file") MultipartFile multipartFile) throws IOException {
-        try (OutputStream os = ((WritableResource) resource).getOutputStream()) {
-            os.write(multipartFile.getBytes());
-        }
-        return "file was updated";
-    }
     @PostMapping("/storeImage")
     public String storeImageFile(@RequestParam MultipartFile file, @RequestParam String containerName, @RequestParam String imageTitle) throws IOException{
         return azureService.storeImage(file, containerName, imageTitle); // 이미지 url 리턴
     }
-
     @PostMapping ("/deleteStorage")
     public void deleteUserStorage(String userId) {
         azureService.deleteContainer(userId);
@@ -53,10 +44,13 @@ public class BlobController{
     public void deleteUserImage(@RequestParam String userId, @RequestParam String imageTitle) {
         azureService.deleteBlob(userId, imageTitle);
     }
+    @PostMapping("/readImages")
+    public void readImages(@RequestParam String userId, @RequestParam String imageTitle){
+        azureService.findByBlobName(userId, imageTitle);
+    }
 
-    @PostMapping("/test")
-    public String test(@RequestParam MultipartFile file, @RequestParam String containerName, @RequestParam String imageTitle) throws IOException{
-        azureService.test(file, containerName, imageTitle);
-        return "200";
+    @GetMapping("/test")
+    public JSONObject test(@RequestParam String userId) throws IOException{
+        return azureService.test(userId);
     }
 }

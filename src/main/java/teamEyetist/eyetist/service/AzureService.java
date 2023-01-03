@@ -1,6 +1,6 @@
 package teamEyetist.eyetist.service;
 
-import com.azure.storage.blob.BlobContainerClient;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -12,8 +12,6 @@ public interface AzureService {
     public String deleteContainer(String containerName);
     public String deleteBlob(String containerName, String blobName);
     public String modifyImage();
-
-    public String findByBlobName(BlobContainerClient blobContainerClient, String blobName);
-
-    public String test(MultipartFile file, String containerName, String imageTitle) throws IOException;
+    public String findByBlobName(String containerName, String blobName);
+    public JSONObject test(String userId);
 }

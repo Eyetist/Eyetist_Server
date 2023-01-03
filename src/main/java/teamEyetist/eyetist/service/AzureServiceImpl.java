@@ -1,9 +1,9 @@
 package teamEyetist.eyetist.service;
 
-import com.azure.core.util.BinaryData;
 import com.azure.identity.DefaultAzureCredential;
 import com.azure.storage.blob.*;
 import com.azure.storage.blob.models.BlobItem;
+import com.nimbusds.jose.shaded.json.JSONObject;
 import org.springframework.core.io.Resource;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -69,7 +69,10 @@ public class AzureServiceImpl implements AzureService{
     }
 
     @Override
-    public String findByBlobName(BlobContainerClient blobContainerClient, String blobName) {
+    public String findByBlobName(String containerName, String blobName) {
+
+        BlobContainerClient blobContainerClient = makeBlobContainerClient(containerName);
+
         for (BlobItem blobItem : blobContainerClient.listBlobs()) {
             if (blobName.equals(blobItem.getName())) {
                 // 현재 중복되는 사진 이름이 있음
@@ -81,7 +84,7 @@ public class AzureServiceImpl implements AzureService{
     }
 
     @Override
-    public String test(MultipartFile file, String containerName, String blobName) throws IOException {
+    public JSONObject test(String containerName){
 
         //blobContainer 생성
         blobServiceClient.createBlobContainerIfNotExists(containerName);
@@ -89,19 +92,17 @@ public class AzureServiceImpl implements AzureService{
         // blobContainerClient 생성
         BlobContainerClient blobContainerClient = makeBlobContainerClient(containerName);
 
-        // 파일 객체의 파일을 Blob 컨테이너에 할당
-        BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
+        JSONObject jsonObject = new JSONObject();
 
-        blobClient.upload(BinaryData.fromStream(file.getInputStream()));
 
-          for (BlobItem blobItem : blobContainerClient.listBlobs()) {
-              if (blobName.equals(blobItem.getName())) {
-                  System.out.println("blobItem.getName() = " + blobItem.getName());
-              }
+        for (BlobItem blobItem : blobContainerClient.listBlobs()) {
+              System.out.println("blobItem.URL = " + blobContainerClient.getBlobClient(blobItem.getName()).getBlobUrl());
+            System.out.println("blobItem.getName() = " + blobItem.getName());
+                jsonObject.put(blobItem.getName(),blobContainerClient.getBlobClient(blobItem.getName()).getBlobUrl());
           }
-        System.out.println("done");
 
-        return null;
+        // blob Url
+        return jsonObject;
     }
 
     public BlobContainerClient makeBlobContainerClient(String containerName){

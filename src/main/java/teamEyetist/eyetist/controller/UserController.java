@@ -2,7 +2,7 @@ package teamEyetist.eyetist.controller;
 
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
-import teamEyetist.eyetist.entity.User;
+import teamEyetist.eyetist.domain.User;
 import teamEyetist.eyetist.service.UserService;
 
 import java.util.Optional;

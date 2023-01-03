@@ -1,6 +1,6 @@
 package teamEyetist.eyetist.service;
 
-import teamEyetist.eyetist.entity.User;
+import teamEyetist.eyetist.domain.User;
 
 import java.util.Optional;
 
