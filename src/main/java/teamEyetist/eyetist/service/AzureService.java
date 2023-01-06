@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface AzureService {
     public String storeImage(MultipartFile file, String ContainerName, String blobName, Long like, String check) throws IOException;
-    public Azure readImage(String containerName, String blobName);
+    public List<Azure> readImage(String containerName, String blobName);
     public List<Azure> readImageList(String containerName);
     public List<Azure> readPublicImageList(String check);
     public String deleteContainer(String containerName);

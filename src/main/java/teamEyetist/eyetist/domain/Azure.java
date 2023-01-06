@@ -19,27 +19,27 @@ public class Azure {
     private String id;
 
     @Id
-    @Column(name = "image_name", nullable = false)
-    private String imageName;
+    @Column(name = "title", nullable = false)
+    private String title;
 
-    @Column(name = "image_url", nullable = false)
-    private String imageUrl;
+    @Column(name = "link", nullable = false)
+    private String link;
 
     @Column(name = "likes", nullable = false)
     private Long likes;
 
-    @Column(name = "public_check", nullable = false)
-    private String publicCheck;
+    @Column(name = "setting", nullable = false)
+    private String setting;
 
     public Azure() {
 
     }
 
-    public Azure(String id, String imageName, String imageUrl, Long likes, String publicCheck) {
+    public Azure(String id, String title, String link, Long likes, String setting) {
         this.id = id;
-        this.imageName = imageName;
-        this.imageUrl = imageUrl;
+        this.title = title;
+        this.link = link;
         this.likes = likes;
-        this.publicCheck = publicCheck;
+        this.setting = setting;
     }
 }

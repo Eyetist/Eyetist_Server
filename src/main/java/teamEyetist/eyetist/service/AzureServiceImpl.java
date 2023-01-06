@@ -48,7 +48,7 @@ public class AzureServiceImpl implements AzureService{
      * 이미지 저장하는 코드
      */
     @Override
-    public String storeImage(MultipartFile file, String containerName, String blobName, Long likes, String check) throws IOException {
+    public String storeImage(MultipartFile file, String containerName, String blobName, Long likes, String set) throws IOException {
 
         // 컨테이너 존재하지 않으면 생성
         blobServiceClient.createBlobContainerIfNotExists(containerName);
@@ -59,8 +59,8 @@ public class AzureServiceImpl implements AzureService{
         // Upload the blob
         blobClient.upload(file.getInputStream(), file.getSize(), true);
 
-        Azure azure = new Azure(containerName, blobName, blobClient.getBlobUrl(), likes, check);
-        System.out.println("containerName+blobName+blobClient.getBlobUrl()+likes+check = " + containerName+blobName+blobClient.getBlobUrl()+likes+check);
+        Azure azure = new Azure(containerName, blobName, blobClient.getBlobUrl(), likes, set);
+        System.out.println("containerName+blobName+blobClient.getBlobUrl()+likes+check = " + containerName+blobName+blobClient.getBlobUrl()+likes);
         //db에 저장
         azureRepository.storeImage(azure);
 
@@ -72,7 +72,7 @@ public class AzureServiceImpl implements AzureService{
      * 회원의 저장된 그림 이미지 한 개 가져오는 코드
      */
     @Override
-    public Azure readImage(String containerName, String blobName){
+    public List<Azure> readImage(String containerName, String blobName){
         return azureRepository.readImage(containerName, blobName);
         /**
          *
@@ -121,8 +121,8 @@ public class AzureServiceImpl implements AzureService{
      * 공개된 사진 리스트 가져오는 코드
      */
     @Override
-    public List<Azure> readPublicImageList(String check) {
-        return azureRepository.readPublicImageList(check);
+    public List<Azure> readPublicImageList(String set) {
+        return azureRepository.readPublicImageList(set);
     }
 
     @Override

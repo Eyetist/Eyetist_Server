@@ -31,9 +31,9 @@ public class AzureRepositoryImpl implements AzureRepository{
     }
 
     @Override
-    public String findImage(String imageName, String id) {
-        Azure result = em.createQuery("SELECT I FROM Azure I where I.image = :imageName AND I.id = :id",  Azure.class)
-                .setParameter("imageName", imageName)
+    public String findImage(String title, String id) {
+        Azure result = em.createQuery("SELECT I FROM Azure I where I.title = :title AND I.id = :id",  Azure.class)
+                .setParameter("title", title)
                 .setParameter("id", id)
                 .getSingleResult();
         return null;
@@ -43,11 +43,12 @@ public class AzureRepositoryImpl implements AzureRepository{
      * 회원의 사진 1장 가져오기
      */
     @Override
-    public Azure readImage(String imageName, String id) {
-        Azure result = em.createQuery("SELECT I FROM Azure I where I.imageName = :imageName AND I.id = :id",  Azure.class)
-                .setParameter("imageName", imageName)
+    public List<Azure> readImage(String title, String id) {
+        List<Azure> result = em.createQuery("SELECT I FROM Azure I where I.title = :title AND I.id = :id")
+                .setParameter("title", title)
                 .setParameter("id", id)
-                .getSingleResult();
+                .getResultList();
+
         return result;
     }
 
@@ -66,9 +67,9 @@ public class AzureRepositoryImpl implements AzureRepository{
      * 공개된 사진 리스트들 가져오드
      */
     @Override
-    public List<Azure> readPublicImageList(String check) {
-        List<Azure> resultList = em.createQuery("SELECT I FROM Azure I where I.check = :check", Azure.class)
-                .setParameter("check", check)
+    public List<Azure> readPublicImageList(String setting) {
+        List<Azure> resultList = em.createQuery("SELECT I FROM Azure I where I.setting = :setting", Azure.class)
+                .setParameter("setting", setting)
                 .getResultList();
         return resultList;
     }

@@ -8,7 +8,7 @@ import java.util.List;
 public interface AzureRepository {
 
     public String storeImage(Azure azure);
-    public Azure readImage(String imageName, String id);
+    public List<Azure> readImage(String imageName, String id);
     public List<Azure> readImageList(String id);
     public List<Azure> readPublicImageList(String check);
     public String findImage(String imageName, String id);

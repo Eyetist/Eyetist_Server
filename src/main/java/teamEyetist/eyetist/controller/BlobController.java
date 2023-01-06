@@ -25,7 +25,7 @@ public class BlobController{
      * 한 회원이 선택한 이미지 가져오는 코드
      */
     @PostMapping("/getImage")
-    public Azure readBlobFile(@RequestParam String userId, @RequestParam String imageTitle){
+    public List<Azure> readBlobFile(@RequestParam String userId, @RequestParam String imageTitle){
         return azureService.readImage(userId, imageTitle);
     }
 
