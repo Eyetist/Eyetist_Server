@@ -3,6 +3,7 @@ package teamEyetist.eyetist.service;
 import com.azure.identity.DefaultAzureCredential;
 import com.azure.storage.blob.*;
 import com.azure.storage.blob.models.BlobItem;
+import com.nimbusds.jose.shaded.json.JSONArray;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import org.springframework.core.io.Resource;
 import org.springframework.util.StreamUtils;
@@ -19,8 +20,11 @@ public class AzureServiceImpl implements AzureService{
         this.blobServiceClient = blobServiceClient;
     }
 
+    /**
+     * 이미지 저장하는 코드
+     */
     @Override
-    public String storeImage(MultipartFile file, String containerName, String blobName) throws IOException {
+    public String storeImage(MultipartFile file, String publicCheck, String containerName, String blobName) throws IOException {
 
         // 컨테이너 존재하지 않으면 생성
         blobServiceClient.createBlobContainerIfNotExists(containerName);
@@ -40,9 +44,47 @@ public class AzureServiceImpl implements AzureService{
         return blobClient.getBlobUrl();
     }
 
+    /**
+     * 회원의 저장된 그림 이미지 한 개 가져오는 코드
+     */
     @Override
-    public String readImage(Resource resource) throws IOException {
-        return StreamUtils.copyToString(resource.getInputStream(), Charset.defaultCharset());
+    public JSONObject readImage(String containerName, String blobName){
+
+        BlobContainerClient blobContainerClient = makeBlobContainerClient(containerName);
+
+        // 파일 객체의 파일을 Blob 컨테이너에 할당
+        BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
+
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("imageName", blobClient.getBlobName());
+        jsonObject.put("imageUrl", blobContainerClient.getBlobClient(blobClient.getBlobName()).getBlobUrl());
+
+        return jsonObject;
+    }
+
+    /**
+     * 한 회원의 이미지 리스트 가져오는 코드
+     */
+    @Override
+    public JSONObject readImageList(String containerName) {
+        //blobContainer 생성
+        blobServiceClient.createBlobContainerIfNotExists(containerName);
+
+        // blobContainerClient 생성
+        BlobContainerClient blobContainerClient = makeBlobContainerClient(containerName);
+
+        JSONObject jsonObject = new JSONObject();
+        JSONArray jsonArray = new JSONArray();
+
+        for (BlobItem blobItem : blobContainerClient.listBlobs()) {
+            JSONObject tempObject = new JSONObject();
+            tempObject.put("imageName", blobItem.getName());
+            tempObject.put("imageUrl", blobContainerClient.getBlobClient(blobItem.getName()).getBlobUrl());
+            jsonArray.add(tempObject);
+        }
+        jsonObject.put("images", jsonArray);
+        // blob Url
+        return jsonObject;
     }
 
     @Override
@@ -64,11 +106,6 @@ public class AzureServiceImpl implements AzureService{
     }
 
     @Override
-    public String modifyImage() {
-        return null;
-    }
-
-    @Override
     public String findByBlobName(String containerName, String blobName) {
 
         BlobContainerClient blobContainerClient = makeBlobContainerClient(containerName);
@@ -86,21 +123,7 @@ public class AzureServiceImpl implements AzureService{
     @Override
     public JSONObject test(String containerName){
 
-        //blobContainer 생성
-        blobServiceClient.createBlobContainerIfNotExists(containerName);
-
-        // blobContainerClient 생성
-        BlobContainerClient blobContainerClient = makeBlobContainerClient(containerName);
-
         JSONObject jsonObject = new JSONObject();
-
-
-        for (BlobItem blobItem : blobContainerClient.listBlobs()) {
-              System.out.println("blobItem.URL = " + blobContainerClient.getBlobClient(blobItem.getName()).getBlobUrl());
-            System.out.println("blobItem.getName() = " + blobItem.getName());
-                jsonObject.put(blobItem.getName(),blobContainerClient.getBlobClient(blobItem.getName()).getBlobUrl());
-          }
-
         // blob Url
         return jsonObject;
     }

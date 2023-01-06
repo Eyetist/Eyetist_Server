@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import teamEyetist.eyetist.domain.User;
 import teamEyetist.eyetist.repository.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,10 +30,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> login(String email, String password) {
+        return userRepository.login(email, password);
+    }
+
+    @Override
     public void modifyUser() {
 
     }
-
     @Override
     public void deleteUser() {
 

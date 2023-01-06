@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import teamEyetist.eyetist.domain.User;
 
 import javax.persistence.EntityManager;
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -28,6 +29,21 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Optional<User> find(String email) {
         return Optional.ofNullable(em.find(User.class, email));
+    }
+
+    @Override
+    public List<User> login(String email, String password) {
+        List<User> users = em.createQuery("SELECT u FROM User u where u.email = :email AND u.password = :password")
+                .setParameter("email", email)
+                .setParameter("password", password)
+                .getResultList();
+        /**
+         * if (users.isEmpty()){
+         *             System.out.println("asdasd");
+         *         }
+         *         else System.out.println("hello = ");
+         */
+        return users;
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import teamEyetist.eyetist.domain.User;
 import teamEyetist.eyetist.service.UserService;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -18,6 +19,7 @@ public class UserController {
     }
 
     @PostMapping("user/join")
+    @CrossOrigin(origins = "http://localhost:3000")
     public String joinMember(@RequestParam String email, @RequestParam String password){
         Optional<User> userCheck = userService.findUser(email);
 
@@ -28,6 +30,11 @@ public class UserController {
             User user = new User(email, password);
             return userService.joinUser(user);
         }
+    }
+
+    @PostMapping("user/login")
+    public List<User> LoginUser(@RequestParam String email, @RequestParam String password){
+        return userService.login(email, password);
     }
 
     @GetMapping("user/{email}")
