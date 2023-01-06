@@ -19,31 +19,31 @@ public class UserController {
     }
 
     @PostMapping("user/join")
-    @CrossOrigin(origins = "http://localhost:3000")
-    public String joinMember(@RequestParam String email, @RequestParam String password){
-        Optional<User> userCheck = userService.findUser(email);
+    //@CrossOrigin(origins = "http://localhost:3000")
+    public String joinMember(@RequestParam String id, @RequestParam String password){
+        Optional<User> userCheck = userService.findUser(id);
 
         if (userCheck.isPresent()) { // 이미 존재하는 이메일
             return "이미 존재하는 이메일입니다.";
         }
         else{ // 회원가입 완료
-            User user = new User(email, password);
+            User user = new User(id, password);
             return userService.joinUser(user);
         }
     }
 
     @PostMapping("user/login")
-    public List<User> LoginUser(@RequestParam String email, @RequestParam String password){
-        return userService.login(email, password);
+    public List<User> LoginUser(@RequestParam String id, @RequestParam String password){
+        return userService.login(id, password);
     }
 
-    @GetMapping("user/{email}")
-    public String findMember(@PathVariable String email){
+    @GetMapping("user/{id}")
+    public String findMember(@PathVariable String id){
         //이메일이 존재하지 않을 시 NPE반환
-        Optional<User> user = userService.findUser(email);
+        Optional<User> user = userService.findUser(id);
 
         if (user.isPresent()) { // 이메일 반환
-            return user.get().getEmail();
+            return user.get().getId();
         }
         else{ // 존재하지 않는 이메일
             return "존재하지 않는 이메일입니다.";

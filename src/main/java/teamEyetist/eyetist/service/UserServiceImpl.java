@@ -25,13 +25,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> findUser(String email) {
-        return userRepository.find(email);
+    public Optional<User> findUser(String id) {
+        return userRepository.find(id);
     }
 
     @Override
-    public List<User> login(String email, String password) {
-        return userRepository.login(email, password);
+    public List<User> login(String id, String password) {
+        return userRepository.login(id, password);
     }
 
     @Override

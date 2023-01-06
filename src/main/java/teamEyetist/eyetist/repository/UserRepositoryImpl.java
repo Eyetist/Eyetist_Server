@@ -27,14 +27,14 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public Optional<User> find(String email) {
-        return Optional.ofNullable(em.find(User.class, email));
+    public Optional<User> find(String id) {
+        return Optional.ofNullable(em.find(User.class, id));
     }
 
     @Override
-    public List<User> login(String email, String password) {
-        List<User> users = em.createQuery("SELECT u FROM User u where u.email = :email AND u.password = :password")
-                .setParameter("email", email)
+    public List<User> login(String id, String password) {
+        List<User> users = em.createQuery("SELECT u FROM User u where u.id = :id AND u.password = :password")
+                .setParameter("id", id)
                 .setParameter("password", password)
                 .getResultList();
         /**
