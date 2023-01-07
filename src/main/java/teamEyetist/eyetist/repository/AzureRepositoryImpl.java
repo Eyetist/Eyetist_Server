@@ -5,10 +5,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import teamEyetist.eyetist.domain.Azure;
+import teamEyetist.eyetist.domain.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 @Transactional
@@ -31,10 +33,10 @@ public class AzureRepositoryImpl implements AzureRepository{
     }
 
     @Override
-    public String findImage(String title, String id) {
-        Azure result = em.createQuery("SELECT I FROM Azure I where I.title = :title AND I.id = :id",  Azure.class)
-                .setParameter("title", title)
-                .setParameter("id", id)
+    public String findImage(String container, String blob) {
+        Azure result = em.createQuery("SELECT I FROM Azure I where I.container = :container AND I.blob = :blob",  Azure.class)
+                .setParameter("container", container)
+                .setParameter("blob", blob)
                 .getSingleResult();
         return null;
     }
@@ -43,11 +45,8 @@ public class AzureRepositoryImpl implements AzureRepository{
      * 회원의 사진 1장 가져오기
      */
     @Override
-    public List<Azure> readImage(String title, String id) {
-        List<Azure> result = em.createQuery("SELECT I FROM Azure I where I.title = :title AND I.id = :id")
-                .setParameter("title", title)
-                .setParameter("id", id)
-                .getResultList();
+    public Azure readImage(String blobname) {
+        Azure result = em.find(Azure.class, blobname);
 
         return result;
     }
@@ -56,9 +55,9 @@ public class AzureRepositoryImpl implements AzureRepository{
      * 한 회원의 사진 리스트들 가져오기
      */
     @Override
-    public List<Azure> readImageList(String id) {
-        List<Azure> resultList = em.createQuery("SELECT I FROM Azure I where I.id = :id", Azure.class)
-                .setParameter("id", id)
+    public List<Azure> readImageList(String container) {
+        List<Azure> resultList = em.createQuery("SELECT I FROM Azure I where I.container = :container", Azure.class)
+                .setParameter("container", container)
                 .getResultList();
         return resultList;
     }
@@ -79,8 +78,12 @@ public class AzureRepositoryImpl implements AzureRepository{
         return null;
     }
 
+    /**
+     * 이미지 삭제하는 코드
+     */
     @Override
-    public String deleteImage() {
+    public String deleteImage(String blobname) {
+        em.remove(em.find(Azure.class, blobname));
         return null;
     }
 }

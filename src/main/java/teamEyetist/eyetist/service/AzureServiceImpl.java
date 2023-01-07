@@ -21,6 +21,7 @@ import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -48,19 +49,20 @@ public class AzureServiceImpl implements AzureService{
      * 이미지 저장하는 코드
      */
     @Override
-    public String storeImage(MultipartFile file, String containerName, String blobName, Long likes, String set) throws IOException {
+    public String storeImage(MultipartFile file, String userId, String title, Long likes, String set) throws IOException {
 
         // 컨테이너 존재하지 않으면 생성
-        blobServiceClient.createBlobContainerIfNotExists(containerName);
+        blobServiceClient.createBlobContainerIfNotExists(userId);
         // blobContainerClient 생성
-        BlobContainerClient blobContainerClient = makeBlobContainerClient(containerName);
+        BlobContainerClient blobContainerClient = makeBlobContainerClient(userId);
         // 파일 객체의 파일을 Blob 컨테이너에 할당
+        String blobName = UUID.randomUUID().toString();
         BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
         // Upload the blob
         blobClient.upload(file.getInputStream(), file.getSize(), true);
+        //객체 생성
+        Azure azure = new Azure(userId, blobName, title, blobClient.getBlobUrl(), likes, set);
 
-        Azure azure = new Azure(containerName, blobName, blobClient.getBlobUrl(), likes, set);
-        System.out.println("containerName+blobName+blobClient.getBlobUrl()+likes+check = " + containerName+blobName+blobClient.getBlobUrl()+likes);
         //db에 저장
         azureRepository.storeImage(azure);
 
@@ -72,8 +74,8 @@ public class AzureServiceImpl implements AzureService{
      * 회원의 저장된 그림 이미지 한 개 가져오는 코드
      */
     @Override
-    public List<Azure> readImage(String containerName, String blobName){
-        return azureRepository.readImage(containerName, blobName);
+    public Azure readImage(String blobname){
+        return azureRepository.readImage(blobname);
         /**
          *
         BlobContainerClient blobContainerClient = makeBlobContainerClient(containerName);
@@ -92,8 +94,8 @@ public class AzureServiceImpl implements AzureService{
      * 한 회원의 이미지 리스트 가져오는 코드
      */
     @Override
-    public List<Azure> readImageList(String containerName) {
-        return azureRepository.readImageList(containerName);
+    public List<Azure> readImageList(String userId) {
+        return azureRepository.readImageList(userId);
         /**
          *
         //blobContainer 생성
@@ -126,27 +128,29 @@ public class AzureServiceImpl implements AzureService{
     }
 
     @Override
-    public String deleteContainer(String containerName) {
+    public String deleteContainer(String userId) {
         // 컨테이너 삭제
-        blobServiceClient.deleteBlobContainerIfExists(containerName);
+        blobServiceClient.deleteBlobContainerIfExists(userId);
         return null;
     }
 
     @Override
-    public String deleteBlob(String containerName, String blobName) {
+    public String deleteBlob(String userId, String blobname) {
         // blobContainerClient 생성
-        BlobContainerClient blobContainerClient = makeBlobContainerClient(containerName);
+        BlobContainerClient blobContainerClient = makeBlobContainerClient(userId);
         // 파일 객체의 파일을 Blob 컨테이너에 할당
-        BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
+        BlobClient blobClient = blobContainerClient.getBlobClient(blobname);
+
         //blob 삭제
-        blobClient.undelete();
+        blobClient.deleteIfExists();
+        azureRepository.deleteImage(blobname);
         return null;
     }
 
     @Override
-    public String findByBlobName(String containerName, String blobName) {
+    public String findByBlobName(String userId, String blobName) {
 
-        BlobContainerClient blobContainerClient = makeBlobContainerClient(containerName);
+        BlobContainerClient blobContainerClient = makeBlobContainerClient(userId);
 
         for (BlobItem blobItem : blobContainerClient.listBlobs()) {
             if (blobName.equals(blobItem.getName())) {

@@ -22,26 +22,32 @@ public class BlobController{
     }
 
     /**
-     * 한 회원이 선택한 이미지 가져오는 코드
+     * 한 회원이 선택한 이미지 가져오는 코드(완료)
      */
     @PostMapping("/getImage")
-    public List<Azure> readBlobFile(@RequestParam String userId, @RequestParam String imageTitle){
-        return azureService.readImage(userId, imageTitle);
+    public Azure readImage(@RequestParam String blobname){
+        return azureService.readImage(blobname);
     }
-
     /**
-     * 한 회원의 이미지 리스트 가져오는 코드
+     * 한 회원의 이미지 리스트 가져오는 코드(완료)
      */
     @PostMapping("/getImageList")
     List<Azure> getImageList(@RequestParam String userId){
         return azureService.readImageList(userId);
     }
     /**
-     * 이미지 저장하는 코드
+     * 이미지 저장하는 코드(완료)
      */
     @PostMapping("/storeImage")
     public String storeImageFile(@RequestParam MultipartFile file, @RequestParam String containerName, @RequestParam String imageTitle, @RequestParam Long likes, @RequestParam String check) throws IOException{
         return azureService.storeImage(file, containerName, imageTitle, likes, check); // 이미지 url 리턴
+    }
+    /**
+     * 퍼블릭 이미지 가져오는 코드(완료)
+     */
+    @GetMapping("/publicImage")
+    public List<Azure> readPublicImageList(String setting){
+        return azureService.readPublicImageList(setting);
     }
     /**
      * 컨테이너 지우는거 -> 회원삭제할 때 같이 지워야함
@@ -53,11 +59,11 @@ public class BlobController{
     }
 
     /**
-     * blob지우는 거 -> 회원에 저장된 사진 중 한 개 지울 때 사용
+     * blob지우는 거 -> 회원에 저장된 사진 중 한 개 지울 때 사용(완료)
      */
     @PostMapping("/deleteImage")
-    public void deleteUserImage(@RequestParam String userId, @RequestParam String imageTitle) {
-        azureService.deleteBlob(userId, imageTitle);
+    public void deleteUserImage(@RequestParam String userId, @RequestParam String blobname) {
+        azureService.deleteBlob(userId, blobname);
     }
 
     /**
@@ -67,6 +73,7 @@ public class BlobController{
     public String findImage(@RequestParam String userId, @RequestParam String imageTitle){
          return azureService.findByBlobName(userId, imageTitle);
     }
+
     @PostMapping("/test")
     public JSONObject test(@RequestParam String userId, @RequestParam String imageTitle) throws IOException{
         return azureService.test(userId, imageTitle);

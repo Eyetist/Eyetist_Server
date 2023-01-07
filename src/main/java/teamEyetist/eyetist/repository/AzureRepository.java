@@ -8,10 +8,10 @@ import java.util.List;
 public interface AzureRepository {
 
     public String storeImage(Azure azure);
-    public List<Azure> readImage(String imageName, String id);
+    public Azure readImage(String blobname);
     public List<Azure> readImageList(String id);
     public List<Azure> readPublicImageList(String check);
     public String findImage(String imageName, String id);
     public String deleteUserStore();
-    public String deleteImage();
+    public String deleteImage(String blobname);
 }
