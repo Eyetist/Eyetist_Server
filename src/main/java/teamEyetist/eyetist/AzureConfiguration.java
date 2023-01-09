@@ -2,28 +2,30 @@ package teamEyetist.eyetist;
 
 import com.azure.identity.DefaultAzureCredential;
 import com.azure.identity.DefaultAzureCredentialBuilder;
-import com.azure.storage.blob.BlobContainerClient;
-import com.azure.storage.blob.BlobContainerClientBuilder;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobServiceClientBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import teamEyetist.eyetist.repository.AzureRepository;
+import teamEyetist.eyetist.repository.AzureRepositoryImpl;
 import teamEyetist.eyetist.service.AzureService;
 import teamEyetist.eyetist.service.AzureServiceImpl;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 @Configuration
 public class AzureConfiguration {
-    //Azure에 로그인할 디폴트 크레덴셜
-    DefaultAzureCredential defaultCredential = new DefaultAzureCredentialBuilder().build();
 
-    //Azure에 로그인
-    BlobServiceClient blobServiceClient = new BlobServiceClientBuilder()
-            .endpoint("https://eyetiststorage.blob.core.windows.net/")
-            .credential(defaultCredential)
-            .buildClient();
+    @PersistenceContext    // EntityManagerFactory가 DI 할 수 있도록 어노테이션 설정
+    private EntityManager em;
 
     @Bean
+    public AzureRepository azureRepository(){
+        return new AzureRepositoryImpl(em);
+    }
+    @Bean
     public AzureService azureService(){
-        return new AzureServiceImpl(defaultCredential, blobServiceClient);
+        return new AzureServiceImpl(new AzureRepositoryImpl(em));
     }
 }
