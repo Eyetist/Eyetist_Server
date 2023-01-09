@@ -49,5 +49,5 @@ jobs:
         with:
           app-name: 'Eyetist'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_D48959822D774FAFB89BD7EBBE95E2E6 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_6A0B55883DAD40EEA6B9F6AAA9DF4D93 }}
           package: '*.war'
