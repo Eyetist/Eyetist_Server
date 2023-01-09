@@ -8,8 +8,8 @@ import java.util.Optional;
 public interface UserRepository {
 
     public String save(User user);
-    public Optional<User> find(String email);
-    public List<User> login(String email, String password);
+    public Optional<User> find(String id);
+    public List<User> login(String id, String password);
     public void modify();
     public void delete();
 }

@@ -1,70 +1,68 @@
 package teamEyetist.eyetist.controller;
 
-import com.azure.identity.DefaultAzureCredential;
-import com.azure.identity.DefaultAzureCredentialBuilder;
-import com.azure.storage.blob.*;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.WritableResource;
-import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import teamEyetist.eyetist.domain.Azure;
 import teamEyetist.eyetist.service.AzureService;
 
 import java.io.IOException;
-import java.io.OutputStream;
-import java.nio.charset.Charset;
-import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("blob")
 public class BlobController{
-    @Value("https://eyetiststorage.blob.core.windows.net/test")
-    private Resource resource;
-    private AzureService azureService;
+
+    private final AzureService azureService;
 
     public BlobController(AzureService azureService) {
         this.azureService = azureService;
     }
-
     /**
-     * 한 회원이 선택한 이미지 가져오는 코드
+     * 한 회원이 선택한 이미지 가져오는 코드(완료)
      */
     @PostMapping("/getImage")
-    public JSONObject readBlobFile(@RequestParam String userId, @RequestParam String imageTitle){
-        return azureService.readImage(userId, imageTitle);
+    public Azure readImage(@RequestParam String blobName){
+        return azureService.readImage(blobName);
     }
-
     /**
-     * 한 회원의 이미지 리스트 가져오는 코드
+     * 한 회원의 이미지 리스트 가져오는 코드(완료)
      */
     @PostMapping("/getImageList")
-    JSONObject getImageList(@RequestParam String userId) throws IOException {
-        return azureService.readImageList(userId);
+    List<Azure> getImageList(@RequestParam String memberId){
+        return azureService.readImageList(memberId);
     }
     /**
-     * 이미지 저장하는 코드
+     * 이미지 저장하는 코드(완료)
      */
     @PostMapping("/storeImage")
-    public String storeImageFile(@RequestParam MultipartFile file, @RequestParam String publicCheck, @RequestParam String containerName, @RequestParam String imageTitle) throws IOException{
-        return azureService.storeImage(file, publicCheck, containerName, imageTitle); // 이미지 url 리턴
+    public String storeImageFile(@RequestParam String file, @RequestParam String member, @RequestParam String title, @RequestParam Long likes, @RequestParam String visibility) throws IOException{
+        return azureService.storeImage(file, member, title, likes, visibility); // 이미지 url 리턴
+    }
+    /**
+     * 퍼블릭 이미지 가져오는 코드(완료)
+     */
+    @GetMapping("/publicImage")
+    public List<Azure> readPublicImageList(String visibility){
+        return azureService.readPublicImageList(visibility);
     }
     /**
      * 컨테이너 지우는거 -> 회원삭제할 때 같이 지워야함
-     * @param userId
+     * @param memberId
      */
     @PostMapping ("/deleteStorage")
-    public void deleteUserStorage(String userId) {
-        azureService.deleteContainer(userId);
+    public void deleteUserStorage(String memberId) {
+        azureService.deleteContainer(memberId);
     }
 
     /**
-     * blob지우는 거 -> 회원에 저장된 사진 중 한 개 지울 때 사용
+     * blob지우는 거 -> 회원에 저장된 사진 중 한 개 지울 때 사용(완료)
      */
     @PostMapping("/deleteImage")
-    public void deleteUserImage(@RequestParam String userId, @RequestParam String imageTitle) {
-        azureService.deleteBlob(userId, imageTitle);
+    public void deleteUserImage(@RequestParam String memberId, @RequestParam String blobName) {
+        azureService.deleteBlob(memberId, blobName);
     }
 
     /**
@@ -74,8 +72,9 @@ public class BlobController{
     public String findImage(@RequestParam String userId, @RequestParam String imageTitle){
          return azureService.findByBlobName(userId, imageTitle);
     }
+
     @PostMapping("/test")
-    public JSONObject test(@RequestParam String userId) throws IOException{
-        return azureService.test(userId);
+    public JSONObject test(@RequestParam String userId, @RequestParam String imageTitle) throws IOException{
+        return azureService.test(userId, imageTitle);
     }
 }

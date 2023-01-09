@@ -13,15 +13,15 @@ import javax.persistence.*;
 @Setter
 public class User {
     @Id
-    @Column(name = "email", nullable = false)
-    private String email;
+    @Column(name = "id", nullable = false)
+    private String id;
     @Column(name = "password", nullable = false)
     private String password;
 
     public User() {
     }
-    public User(String email, String password) {
-        this.email = email;
+    public User(String id, String password) {
+        this.id = id;
         this.password = password;
     }
 }
