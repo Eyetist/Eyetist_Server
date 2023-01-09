@@ -1,27 +1,24 @@
 package teamEyetist.eyetist.service;
 
+import com.azure.core.util.BinaryData;
 import com.azure.identity.DefaultAzureCredential;
 import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.storage.blob.*;
+import com.azure.storage.blob.models.*;
 import com.azure.storage.blob.models.BlobItem;
-import com.nimbusds.jose.shaded.json.JSONArray;
 import com.nimbusds.jose.shaded.json.JSONObject;
+import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StreamUtils;
-import org.springframework.web.multipart.MultipartFile;
 import teamEyetist.eyetist.domain.Azure;
 import teamEyetist.eyetist.repository.AzureRepository;
-
+import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
 
 @Service
 @Transactional
@@ -49,7 +46,7 @@ public class AzureServiceImpl implements AzureService{
      * 이미지 저장하는 코드
      */
     @Override
-    public String storeImage(MultipartFile file, String userId, String title, Long likes, String set) throws IOException {
+    public String storeImage(String file, String userId, String title, Long likes, String set) throws IOException {
 
         // 컨테이너 존재하지 않으면 생성
         blobServiceClient.createBlobContainerIfNotExists(userId);
@@ -58,8 +55,25 @@ public class AzureServiceImpl implements AzureService{
         // 파일 객체의 파일을 Blob 컨테이너에 할당
         String blobName = UUID.randomUUID().toString();
         BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
-        // Upload the blob
-        blobClient.upload(file.getInputStream(), file.getSize(), true);
+
+
+        String data = file.split(",")[1];
+        byte[] binaryData = Base64.getDecoder().decode(data);
+
+        try (ByteArrayInputStream dataStream = new ByteArrayInputStream(binaryData.toString().getBytes())) {
+            //이미지 Azure에 업로드
+            blobClient.upload(dataStream);
+
+            //blob 이미지 content-type -> image/png로 변경
+            headerChange(blobClient);
+
+            //Azure 컨테이너 퍼블릭 읽기권한으로 변경
+            readPermissionChange(blobContainerClient);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
         //객체 생성
         Azure azure = new Azure(userId, blobName, title, blobClient.getBlobUrl(), likes, set);
 
@@ -127,6 +141,9 @@ public class AzureServiceImpl implements AzureService{
         return azureRepository.readPublicImageList(set);
     }
 
+    /**
+     * 회원삭제 할 때 컨테이너 지우는 코드
+     */
     @Override
     public String deleteContainer(String userId) {
         // 컨테이너 삭제
@@ -134,6 +151,9 @@ public class AzureServiceImpl implements AzureService{
         return null;
     }
 
+    /**
+     * 이미지 지우는 코드
+     */
     @Override
     public String deleteBlob(String userId, String blobname) {
         // blobContainerClient 생성
@@ -185,7 +205,21 @@ public class AzureServiceImpl implements AzureService{
         return jsonObject;
     }
 
-    public BlobContainerClient makeBlobContainerClient(String containerName){
+    private void headerChange(BlobClient blobClient){
+        BlobHttpHeaders blobHttpHeader = new BlobHttpHeaders();
+        blobHttpHeader.setContentType("image/png");
+        blobClient.setHttpHeaders(blobHttpHeader);
+    }
+    private void readPermissionChange(BlobContainerClient blobContainerClient){
+        //에저에 읽기권한 추가
+        BlobSignedIdentifier identifier = new BlobSignedIdentifier()
+                .setId("publicreadaccess")
+                .setAccessPolicy(new BlobAccessPolicy()
+                        .setPermissions("r"));
+        //에저에 읽기권한 추가
+        blobContainerClient.setAccessPolicy(PublicAccessType.BLOB, Collections.singletonList(identifier));
+    }
+    private BlobContainerClient makeBlobContainerClient(String containerName){
         return new BlobContainerClientBuilder()
                 .connectionString("DefaultEndpointsProtocol=https;AccountName=eyetiststorage;AccountKey=SkhZFLZGXwefVTMjkwqAyQgdNZpz3eA1nCCHfshtn4/xdAYwQbRNKFVRlMxINVWdtWKOzYrD6PJH+AStbSGvYQ==;EndpointSuffix=core.windows.net")
                 .containerName(containerName)

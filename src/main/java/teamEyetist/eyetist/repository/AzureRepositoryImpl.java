@@ -47,7 +47,6 @@ public class AzureRepositoryImpl implements AzureRepository{
     @Override
     public Azure readImage(String blobname) {
         Azure result = em.find(Azure.class, blobname);
-
         return result;
     }
 

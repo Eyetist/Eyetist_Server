@@ -20,7 +20,6 @@ public class BlobController{
     public BlobController(AzureService azureService) {
         this.azureService = azureService;
     }
-
     /**
      * 한 회원이 선택한 이미지 가져오는 코드(완료)
      */
@@ -39,7 +38,7 @@ public class BlobController{
      * 이미지 저장하는 코드(완료)
      */
     @PostMapping("/storeImage")
-    public String storeImageFile(@RequestParam MultipartFile file, @RequestParam String containerName, @RequestParam String imageTitle, @RequestParam Long likes, @RequestParam String check) throws IOException{
+    public String storeImageFile(@RequestParam String file, @RequestParam String containerName, @RequestParam String imageTitle, @RequestParam Long likes, @RequestParam String check) throws IOException{
         return azureService.storeImage(file, containerName, imageTitle, likes, check); // 이미지 url 리턴
     }
     /**
