@@ -15,12 +15,12 @@ import javax.persistence.Id;
 @Setter
 public class Azure {
 
-    @Column(name = "container", nullable = false)
-    private String container;
+    @Column(name = "member", nullable = false)
+    private String member;
 
     @Id
-    @Column(name = "blobname", nullable = false)
-    private String blob;
+    @Column(name = "blobName", nullable = false)
+    private String blobName;
 
     @Column(name = "title", nullable = false)
     private String title;
@@ -31,20 +31,20 @@ public class Azure {
     @Column(name = "likes", nullable = false)
     private Long likes;
 
-    @Column(name = "setting", nullable = false)
-    private String setting;
+    @Column(name = "visibility", nullable = false)
+    private String visibility;
 
     public Azure() {
 
     }
 
 
-    public Azure(String container, String blob, String title, String link, Long likes, String setting) {
-        this.container = container;
-        this.blob = blob;
+    public Azure(String member, String blobName, String title, String link, Long likes, String visibility) {
+        this.member = member;
+        this.blobName = blobName;
         this.title = title;
         this.link = link;
         this.likes = likes;
-        this.setting = setting;
+        this.visibility = visibility;
     }
 }

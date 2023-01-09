@@ -33,10 +33,10 @@ public class AzureRepositoryImpl implements AzureRepository{
     }
 
     @Override
-    public String findImage(String container, String blob) {
-        Azure result = em.createQuery("SELECT I FROM Azure I where I.container = :container AND I.blob = :blob",  Azure.class)
-                .setParameter("container", container)
-                .setParameter("blob", blob)
+    public String findImage(String member, String blobName) {
+        Azure result = em.createQuery("SELECT I FROM Azure I where I.member = :member AND I.blobName = :blobName",  Azure.class)
+                .setParameter("member", member)
+                .setParameter("blobName", blobName)
                 .getSingleResult();
         return null;
     }
@@ -45,8 +45,8 @@ public class AzureRepositoryImpl implements AzureRepository{
      * 회원의 사진 1장 가져오기
      */
     @Override
-    public Azure readImage(String blobname) {
-        Azure result = em.find(Azure.class, blobname);
+    public Azure readImage(String blobName) {
+        Azure result = em.find(Azure.class, blobName);
         return result;
     }
 
@@ -54,9 +54,9 @@ public class AzureRepositoryImpl implements AzureRepository{
      * 한 회원의 사진 리스트들 가져오기
      */
     @Override
-    public List<Azure> readImageList(String container) {
-        List<Azure> resultList = em.createQuery("SELECT I FROM Azure I where I.container = :container", Azure.class)
-                .setParameter("container", container)
+    public List<Azure> readImageList(String member) {
+        List<Azure> resultList = em.createQuery("SELECT I FROM Azure I where I.member = :member", Azure.class)
+                .setParameter("member", member)
                 .getResultList();
         return resultList;
     }
@@ -65,9 +65,9 @@ public class AzureRepositoryImpl implements AzureRepository{
      * 공개된 사진 리스트들 가져오드
      */
     @Override
-    public List<Azure> readPublicImageList(String setting) {
-        List<Azure> resultList = em.createQuery("SELECT I FROM Azure I where I.setting = :setting", Azure.class)
-                .setParameter("setting", setting)
+    public List<Azure> readPublicImageList(String visibility) {
+        List<Azure> resultList = em.createQuery("SELECT I FROM Azure I where I.visibility = :visibility", Azure.class)
+                .setParameter("visibility", visibility)
                 .getResultList();
         return resultList;
     }
@@ -81,8 +81,8 @@ public class AzureRepositoryImpl implements AzureRepository{
      * 이미지 삭제하는 코드
      */
     @Override
-    public String deleteImage(String blobname) {
-        em.remove(em.find(Azure.class, blobname));
+    public String deleteImage(String blobName) {
+        em.remove(em.find(Azure.class, blobName));
         return null;
     }
 }

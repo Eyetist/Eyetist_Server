@@ -88,8 +88,8 @@ public class AzureServiceImpl implements AzureService{
      * 회원의 저장된 그림 이미지 한 개 가져오는 코드
      */
     @Override
-    public Azure readImage(String blobname){
-        return azureRepository.readImage(blobname);
+    public Azure readImage(String blobName){
+        return azureRepository.readImage(blobName);
         /**
          *
         BlobContainerClient blobContainerClient = makeBlobContainerClient(containerName);
