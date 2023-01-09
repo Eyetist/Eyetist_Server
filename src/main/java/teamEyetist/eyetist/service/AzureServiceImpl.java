@@ -1,13 +1,11 @@
 package teamEyetist.eyetist.service;
 
-import com.azure.core.util.BinaryData;
 import com.azure.identity.DefaultAzureCredential;
 import com.azure.identity.DefaultAzureCredentialBuilder;
 import com.azure.storage.blob.*;
 import com.azure.storage.blob.models.*;
 import com.azure.storage.blob.models.BlobItem;
 import com.nimbusds.jose.shaded.json.JSONObject;
-import net.bytebuddy.asm.Advice;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

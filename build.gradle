@@ -45,6 +45,3 @@ dependencies {
 	implementation 'com.azure:azure-storage-blob:12.20.1'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
-}
