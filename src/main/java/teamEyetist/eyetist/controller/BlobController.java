@@ -31,8 +31,8 @@ public class BlobController{
      * 한 회원의 이미지 리스트 가져오는 코드(완료)
      */
     @PostMapping("/getImageList")
-    List<Azure> getImageList(@RequestParam String memberId){
-        return azureService.readImageList(memberId);
+    List<Azure> getImageList(@RequestParam String member){
+        return azureService.readImageList(member);
     }
     /**
      * 이미지 저장하는 코드(완료)
@@ -50,31 +50,31 @@ public class BlobController{
     }
     /**
      * 컨테이너 지우는거 -> 회원삭제할 때 같이 지워야함
-     * @param memberId
+     * @param member
      */
     @PostMapping ("/deleteStorage")
-    public void deleteUserStorage(String memberId) {
-        azureService.deleteContainer(memberId);
+    public void deleteUserStorage(String member) {
+        azureService.deleteContainer(member);
     }
 
     /**
      * blob지우는 거 -> 회원에 저장된 사진 중 한 개 지울 때 사용(완료)
      */
     @PostMapping("/deleteImage")
-    public void deleteUserImage(@RequestParam String memberId, @RequestParam String blobName) {
-        azureService.deleteBlob(memberId, blobName);
+    public void deleteUserImage(@RequestParam String member, @RequestParam String blobName) {
+        azureService.deleteBlob(member, blobName);
     }
 
     /**
      * 이미지 있는지 체크(지워도 될듯?)
      */
     @PostMapping("/findImage")
-    public String findImage(@RequestParam String userId, @RequestParam String imageTitle){
-         return azureService.findByBlobName(userId, imageTitle);
+    public String findImage(@RequestParam String member, @RequestParam String imageTitle){
+         return azureService.findByBlobName(member, imageTitle);
     }
 
     @PostMapping("/test")
-    public JSONObject test(@RequestParam String userId, @RequestParam String imageTitle) throws IOException{
-        return azureService.test(userId, imageTitle);
+    public JSONObject test(@RequestParam String member, @RequestParam String imageTitle) throws IOException{
+        return azureService.test(member, imageTitle);
     }
 }
