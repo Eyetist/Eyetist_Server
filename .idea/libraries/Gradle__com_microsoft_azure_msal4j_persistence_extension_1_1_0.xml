@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.microsoft.azure:msal4j-persistence-extension:1.1.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.microsoft.azure/msal4j-persistence-extension/1.1.0/be693563e6c941cd830bf5e19ec850cef80a5bb1/msal4j-persistence-extension-1.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.microsoft.azure/msal4j-persistence-extension/1.1.0/b8753385cd3bf885f3b2145e7e914072109e8890/msal4j-persistence-extension-1.1.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.azure:azure-core-management:1.9.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.azure/azure-core-management/1.9.0/329d7850be3b17d89c0f26045ee891c4c4975b20/azure-core-management-1.9.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.azure/azure-core-management/1.9.0/5516fcbcccd43a86bd082e57d67338ec2a608c39/azure-core-management-1.9.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

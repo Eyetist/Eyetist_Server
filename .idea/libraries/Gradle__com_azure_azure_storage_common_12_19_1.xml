@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.azure:azure-storage-common:12.19.1">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.azure/azure-storage-common/12.19.1/d4081235239d502f11b91964bc6f96ad4f72e450/azure-storage-common-12.19.1.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.azure/azure-storage-common/12.19.1/d2fb13c088e5fcffa4149335e3de66bdd149825e/azure-storage-common-12.19.1-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

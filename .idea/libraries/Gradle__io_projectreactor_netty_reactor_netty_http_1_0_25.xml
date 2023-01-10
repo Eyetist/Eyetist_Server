@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: io.projectreactor.netty:reactor-netty-http:1.0.25">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.projectreactor.netty/reactor-netty-http/1.0.25/cf4ad33ed1b51c48a1e1b183a0889dffcdaece07/reactor-netty-http-1.0.25.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.projectreactor.netty/reactor-netty-http/1.0.25/664f7245791b20fbf7ef1efabca860bcbfcbb711/reactor-netty-http-1.0.25-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

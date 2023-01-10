@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.azure.spring:spring-cloud-azure-starter-storage-blob:4.5.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.azure.spring/spring-cloud-azure-starter-storage-blob/4.5.0/6477ee1f01bbf63a69ac77368eb0b1dec2b80168/spring-cloud-azure-starter-storage-blob-4.5.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.azure.spring/spring-cloud-azure-starter-storage-blob/4.5.0/1f46a778c8cc90901ef6bc3fb0d8cffdf826950c/spring-cloud-azure-starter-storage-blob-4.5.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: io.netty:netty-transport-native-kqueue:osx-x86_64:4.1.85.Final">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-kqueue/4.1.85.Final/23234e860919220cc78fdae3eaa5283679f0b367/netty-transport-native-kqueue-4.1.85.Final-osx-x86_64.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/io.netty/netty-transport-native-kqueue/4.1.85.Final/23cb595347c45a83993927b678c85e468b11d892/netty-transport-native-kqueue-4.1.85.Final-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

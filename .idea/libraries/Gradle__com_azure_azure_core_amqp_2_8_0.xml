@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.azure:azure-core-amqp:2.8.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.azure/azure-core-amqp/2.8.0/d01972d47f48d4ac98776c74f6446dba7d847cb6/azure-core-amqp-2.8.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.azure/azure-core-amqp/2.8.0/be6d1baedaed2943d8177cbbf55f376bfb99eb2c/azure-core-amqp-2.8.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

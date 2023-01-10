@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.azure.spring:spring-cloud-azure-core:4.5.0">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.azure.spring/spring-cloud-azure-core/4.5.0/dd7fbe0bbab9c217a1f648101b38ee15ba1f8ec9/spring-cloud-azure-core-4.5.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.azure.spring/spring-cloud-azure-core/4.5.0/586383d91a0cae43ed1dc73954c308bd7ae85d9b/spring-cloud-azure-core-4.5.0-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

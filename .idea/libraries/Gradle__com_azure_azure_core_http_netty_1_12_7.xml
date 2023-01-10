@@ -1,0 +1,11 @@
+<component name="libraryTable">
+  <library name="Gradle: com.azure:azure-core-http-netty:1.12.7">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.azure/azure-core-http-netty/1.12.7/e7739b5c0d9c968afcb6100f15f3491143d47814/azure-core-http-netty-1.12.7.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.azure/azure-core-http-netty/1.12.7/5276dcdf40de63e26622740b51a1675b9611639e/azure-core-http-netty-1.12.7-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

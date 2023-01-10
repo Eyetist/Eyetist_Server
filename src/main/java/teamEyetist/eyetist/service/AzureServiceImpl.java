@@ -219,7 +219,7 @@ public class AzureServiceImpl implements AzureService{
     }
     private BlobContainerClient makeBlobContainerClient(String containerName){
         return new BlobContainerClientBuilder()
-                .connectionString("DefaultEndpointsProtocol=https;AccountName=eyetiststorage;AccountKey=SkhZFLZGXwefVTMjkwqAyQgdNZpz3eA1nCCHfshtn4/xdAYwQbRNKFVRlMxINVWdtWKOzYrD6PJH+AStbSGvYQ==;EndpointSuffix=core.windows.net")
+                .connectionString("DefaultEndpointsProtocol=https;AccountName=eyetiststorage;AccountKey=GS/r8XlAh96ulBFtlicC+FYL+IQXOKksbLcvphHfN2ti1pVZn/4tJCpRoAGDWWXD+9/WwOVaIc9Z+AStQiCrZw==;EndpointSuffix=core.windows.net")
                 .containerName(containerName)
                 .buildClient();
     }
