@@ -8,6 +8,7 @@ plugins {
 group = 'teamEyetist'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+apply plugin:'war'
 
 //lombok 설정 추가 시작
 configurations {
@@ -21,6 +22,12 @@ repositories {
 	mavenCentral()
 }
 
+bootWar {
+	archiveName 'ROOT.war'
+	archiveBaseName = "ROOT"
+	archiveFileName = "ROOT.war"
+	archiveVersion  = "0.0.0"
+}
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -44,5 +51,7 @@ dependencies {
 	implementation 'com.azure.spring:spring-cloud-azure-starter-storage-blob:4.5.0'
 	implementation 'com.azure:azure-identity:1.7.2'
 	implementation 'com.azure:azure-storage-blob:12.20.1'
+
+	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
 
