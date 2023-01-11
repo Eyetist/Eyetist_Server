@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import teamEyetist.eyetist.domain.Azure;
 import teamEyetist.eyetist.service.AzureService;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -74,7 +75,7 @@ public class BlobController{
     }
 
     @PostMapping("/test")
-    public JSONObject test(@RequestParam String member, @RequestParam String imageTitle) throws IOException{
-        return azureService.test(member, imageTitle);
+    public String test(@RequestParam MultipartFile file, @RequestParam String member, @RequestParam String title, @RequestParam Long likes, @RequestParam String visibility) throws IOException{
+        return azureService.test(file, member, title, likes, visibility); // 이미지 url 리턴
     }
 }

@@ -9,11 +9,13 @@ import com.nimbusds.jose.shaded.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import teamEyetist.eyetist.domain.Azure;
 import teamEyetist.eyetist.repository.AzureRepository;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -44,12 +46,12 @@ public class AzureServiceImpl implements AzureService{
      * 이미지 저장하는 코드
      */
     @Override
-    public String storeImage(String file, String userId, String title, Long likes, String set) throws IOException {
+    public String storeImage(String file, String member, String title, Long likes, String visibility) throws IOException {
 
         // 컨테이너 존재하지 않으면 생성
-        blobServiceClient.createBlobContainerIfNotExists(userId);
+        blobServiceClient.createBlobContainerIfNotExists(member);
         // blobContainerClient 생성
-        BlobContainerClient blobContainerClient = makeBlobContainerClient(userId);
+        BlobContainerClient blobContainerClient = makeBlobContainerClient(member);
         // 파일 객체의 파일을 Blob 컨테이너에 할당
         String blobName = UUID.randomUUID().toString();
         BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
@@ -73,7 +75,7 @@ public class AzureServiceImpl implements AzureService{
         }
 
         //객체 생성
-        Azure azure = new Azure(userId, blobName, title, blobClient.getBlobUrl(), likes, set);
+        Azure azure = new Azure(member, blobName, title, blobClient.getBlobUrl(), likes, visibility);
 
         //db에 저장
         azureRepository.storeImage(azure);
@@ -181,26 +183,31 @@ public class AzureServiceImpl implements AzureService{
     }
 
     @Override
-    public JSONObject test(String containerName, String blobName){
-    // blobContainerClient 생성
-        BlobContainerClient blobContainerClient = makeBlobContainerClient(containerName);
+    public String test(MultipartFile file, String member, String title, Long likes, String set) throws IOException {
+        // 컨테이너 존재하지 않으면 생성
+        blobServiceClient.createBlobContainerIfNotExists(member);
+        // blobContainerClient 생성
+        BlobContainerClient blobContainerClient = makeBlobContainerClient(member);
         // 파일 객체의 파일을 Blob 컨테이너에 할당
+        String blobName = UUID.randomUUID().toString();
+
         BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
 
-        Map<String, String> tags = new HashMap<String, String>();
-        tags.put("title", blobName);
-        tags.put("Content", "image");
-        tags.put("Date", String.valueOf(LocalDate.now()));
-        blobClient.setTags(tags);
+        blobClient.upload(file.getInputStream());
+        //blob 이미지 content-type -> image/png로 변경
+        headerChange(blobClient);
 
-        String query = "&where=title='iopp3423'";
+        //Azure 컨테이너 퍼블릭 읽기권한으로 변경
+        readPermissionChange(blobContainerClient);
 
-        blobContainerClient.findBlobsByTags(query)
-                .forEach(blob -> System.out.printf("Name: %s%n", blob.getName()));
+        //객체 생성
+        Azure azure = new Azure(member, blobName, title, blobClient.getBlobUrl(), likes, set);
 
-        JSONObject jsonObject = new JSONObject();
+        //db에 저장
+        azureRepository.storeImage(azure);
+
         // blob Url
-        return jsonObject;
+        return blobClient.getBlobUrl();
     }
 
     private void headerChange(BlobClient blobClient){

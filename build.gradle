@@ -2,13 +2,11 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.6'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
-	id 'war' //배포할 때
 }
 
 group = 'teamEyetist'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
-apply plugin:'war'
 
 //lombok 설정 추가 시작
 configurations {
@@ -20,14 +18,6 @@ configurations {
 
 repositories {
 	mavenCentral()
-}
-
-bootWar {
-	archiveName 'ROOT.war'
-	archiveBaseName = "ROOT"
-	archiveFileName = "ROOT.war"
-	archiveVersion  = "0.0.0"
-	enabled = true
 }
 
 dependencies {
@@ -52,7 +42,5 @@ dependencies {
 	implementation 'com.azure.spring:spring-cloud-azure-starter-storage-blob:4.5.0'
 	implementation 'com.azure:azure-identity:1.7.2'
 	implementation 'com.azure:azure-storage-blob:12.20.1'
-
-	providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
 }
 
