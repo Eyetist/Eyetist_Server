@@ -38,7 +38,7 @@ public class BlobController{
     /**
      * 이미지 저장하는 코드(완료)
      */
-    @PostMapping("/storeImage")
+    @PostMapping("/store")
     public String storeImageFile(@RequestParam String file, @RequestParam String member, @RequestParam String title, @RequestParam Long likes, @RequestParam String visibility) throws IOException{
         return azureService.storeImage(file, member, title, likes, visibility); // 이미지 url 리턴
     }

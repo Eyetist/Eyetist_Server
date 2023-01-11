@@ -30,6 +30,7 @@ public class AzureServiceImpl implements AzureService{
 
     @Autowired
     public AzureServiceImpl(AzureRepository azureRepository) {
+
         //Azure에 로그인할 디폴트 크레덴셜
         defaultCredential = new DefaultAzureCredentialBuilder().build();
 
@@ -48,40 +49,8 @@ public class AzureServiceImpl implements AzureService{
     @Override
     public String storeImage(String file, String member, String title, Long likes, String visibility) throws IOException {
 
-        // 컨테이너 존재하지 않으면 생성
-        blobServiceClient.createBlobContainerIfNotExists(member);
-        // blobContainerClient 생성
-        BlobContainerClient blobContainerClient = makeBlobContainerClient(member);
-        // 파일 객체의 파일을 Blob 컨테이너에 할당
-        String blobName = UUID.randomUUID().toString();
-        BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
-
-
-        String data = file.split(",")[1];
-        byte[] binaryData = Base64.getDecoder().decode(data);
-
-        try (ByteArrayInputStream dataStream = new ByteArrayInputStream(binaryData.toString().getBytes())) {
-            //이미지 Azure에 업로드
-            blobClient.upload(dataStream);
-
-            //blob 이미지 content-type -> image/png로 변경
-            headerChange(blobClient);
-
-            //Azure 컨테이너 퍼블릭 읽기권한으로 변경
-            readPermissionChange(blobContainerClient);
-
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-
-        //객체 생성
-        Azure azure = new Azure(member, blobName, title, blobClient.getBlobUrl(), likes, visibility);
-
-        //db에 저장
-        azureRepository.storeImage(azure);
-
         // blob Url
-        return blobClient.getBlobUrl();
+        return "200";
     }
 
     /**
@@ -220,9 +189,10 @@ public class AzureServiceImpl implements AzureService{
         BlobSignedIdentifier identifier = new BlobSignedIdentifier()
                 .setId("publicreadaccess")
                 .setAccessPolicy(new BlobAccessPolicy()
-                        .setPermissions("r"));
+                        .setPermissions("racwdl"));
+
         //에저에 읽기권한 추가
-        blobContainerClient.setAccessPolicy(PublicAccessType.BLOB, Collections.singletonList(identifier));
+        blobContainerClient.setAccessPolicy(PublicAccessType.CONTAINER, Collections.singletonList(identifier));
     }
     private BlobContainerClient makeBlobContainerClient(String containerName){
         return new BlobContainerClientBuilder()
