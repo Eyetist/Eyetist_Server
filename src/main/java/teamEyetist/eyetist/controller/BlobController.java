@@ -46,8 +46,8 @@ public class BlobController{
      * 퍼블릭 이미지 가져오는 코드(완료)
      */
     @GetMapping("/publicImage")
-    public List<Azure> readPublicImageList(String visibility){
-        return azureService.readPublicImageList(visibility);
+    public List<Azure> readPublicImageList(String visibility, int page){
+        return azureService.readPublicImageList(visibility, page);
     }
     /**
      * 컨테이너 지우는거 -> 회원삭제할 때 같이 지워야함

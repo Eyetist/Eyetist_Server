@@ -13,7 +13,7 @@ public interface AzureService {
     public String storeImage(String file, String member, String blobName, Long like, String set) throws IOException;
     public Azure readImage(String blobname);
     public List<Azure> readImageList(String containerName);
-    public List<Azure> readPublicImageList(String check);
+    public List<Azure> readPublicImageList(String visibility, int page);
     public String deleteContainer(String containerName);
     public String deleteBlob(String userId, String blobName);
     public String findByBlobName(String containerName, String blobName);

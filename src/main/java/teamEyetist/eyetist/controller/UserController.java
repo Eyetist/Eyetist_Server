@@ -24,7 +24,7 @@ public class UserController {
         Optional<User> userCheck = userService.findUser(id);
 
         if (userCheck.isPresent()) { // 이미 존재하는 이메일
-            return "이미 존재하는 이메일입니다.";
+            return "400";
         }
         else{ // 회원가입 완료
             User user = new User(id, password);
@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("user/login")
-    public List<User> LoginUser(@RequestParam String id, @RequestParam String password){
+    public String LoginUser(@RequestParam String id, @RequestParam String password){
         return userService.login(id, password);
     }
 

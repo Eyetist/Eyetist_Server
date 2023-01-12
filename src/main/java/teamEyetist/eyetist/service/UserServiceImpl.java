@@ -30,7 +30,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> login(String id, String password) {
+    public String login(String id, String password) {
         return userRepository.login(id, password);
     }
 

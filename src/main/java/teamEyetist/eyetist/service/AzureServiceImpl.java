@@ -1,11 +1,9 @@
 package teamEyetist.eyetist.service;
 
-import com.azure.identity.DefaultAzureCredential;
-import com.azure.identity.DefaultAzureCredentialBuilder;
+import com.azure.identity.*;
 import com.azure.storage.blob.*;
 import com.azure.storage.blob.models.*;
 import com.azure.storage.blob.models.BlobItem;
-import com.nimbusds.jose.shaded.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,11 +11,10 @@ import org.springframework.web.multipart.MultipartFile;
 import teamEyetist.eyetist.domain.Azure;
 import teamEyetist.eyetist.repository.AzureRepository;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.time.LocalDate;
 import java.util.*;
+
+import static teamEyetist.eyetist.Constant.CONNECT_STRING;
 
 
 @Service
@@ -36,8 +33,7 @@ public class AzureServiceImpl implements AzureService{
 
         //Azure에 로그인
         blobServiceClient = new BlobServiceClientBuilder()
-                .endpoint("https://eyetiststorage.blob.core.windows.net/")
-                .credential(defaultCredential)
+                .connectionString(CONNECT_STRING)
                 .buildClient();
 
         this.azureRepository = azureRepository;
@@ -49,8 +45,44 @@ public class AzureServiceImpl implements AzureService{
     @Override
     public String storeImage(String file, String member, String title, Long likes, String visibility) throws IOException {
 
+        // 컨테이너 존재하지 않으면 생성
+        blobServiceClient.createBlobContainerIfNotExists(member);
+        // blobContainerClient 생성
+        BlobContainerClient blobContainerClient = makeBlobContainerClient(member);
+
+        // 파일 객체의 파일을 Blob 컨테이너에 할당
+        String blobName = UUID.randomUUID().toString();
+
+        BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
+
+
+        String data = file.split(",")[1];
+
+        byte[] binaryData = Base64.getDecoder().decode(data);
+
+        try (ByteArrayInputStream dataStream = new ByteArrayInputStream(binaryData)) {
+
+            //이미지 Azure에 업로드
+            blobClient.upload(dataStream);
+
+            //blob 이미지 content-type -> image/png로 변경
+            headerChange(blobClient);
+
+            //Azure 컨테이너 퍼블릭 읽기권한으로 변경
+            readPermissionChange(blobContainerClient);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        //객체 생성
+        Azure azure = new Azure(member, blobName, title, blobClient.getBlobUrl(), likes, visibility);
+
+        //db에 저장
+        azureRepository.storeImage(azure);
+
         // blob Url
-        return "200";
+        return blobClient.getBlobUrl();
     }
 
     /**
@@ -59,18 +91,6 @@ public class AzureServiceImpl implements AzureService{
     @Override
     public Azure readImage(String blobName){
         return azureRepository.readImage(blobName);
-        /**
-         *
-        BlobContainerClient blobContainerClient = makeBlobContainerClient(containerName);
-
-        // 파일 객체의 파일을 Blob 컨테이너에 할당
-        BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
-
-        JSONObject jsonObject = new JSONObject();
-        jsonObject.put("imageName", blobClient.getBlobName());
-        jsonObject.put("imageUrl", blobContainerClient.getBlobClient(blobClient.getBlobName()).getBlobUrl());
-         return jsonObject;
-         */
     }
 
     /**
@@ -79,35 +99,14 @@ public class AzureServiceImpl implements AzureService{
     @Override
     public List<Azure> readImageList(String userId) {
         return azureRepository.readImageList(userId);
-        /**
-         *
-        //blobContainer 생성
-        blobServiceClient.createBlobContainerIfNotExists(containerName);
-
-        // blobContainerClient 생성
-        BlobContainerClient blobContainerClient = makeBlobContainerClient(containerName);
-
-        JSONObject jsonObject = new JSONObject();
-        JSONArray jsonArray = new JSONArray();
-
-        for (BlobItem blobItem : blobContainerClient.listBlobs()) {
-            JSONObject tempObject = new JSONObject();
-            tempObject.put("imageName", blobItem.getName());
-            tempObject.put("imageUrl", blobContainerClient.getBlobClient(blobItem.getName()).getBlobUrl());
-            jsonArray.add(tempObject);
-        }
-        jsonObject.put("images", jsonArray);
-        // blob Url
-        return jsonObject;
-         */
     }
 
     /**
      * 공개된 사진 리스트 가져오는 코드
      */
     @Override
-    public List<Azure> readPublicImageList(String set) {
-        return azureRepository.readPublicImageList(set);
+    public List<Azure> readPublicImageList(String visibility, int page) {
+        return azureRepository.readPublicImageList(visibility, page);
     }
 
     /**
@@ -124,22 +123,22 @@ public class AzureServiceImpl implements AzureService{
      * 이미지 지우는 코드
      */
     @Override
-    public String deleteBlob(String userId, String blobname) {
+    public String deleteBlob(String id, String blobName) {
         // blobContainerClient 생성
-        BlobContainerClient blobContainerClient = makeBlobContainerClient(userId);
+        BlobContainerClient blobContainerClient = makeBlobContainerClient(id);
         // 파일 객체의 파일을 Blob 컨테이너에 할당
-        BlobClient blobClient = blobContainerClient.getBlobClient(blobname);
+        BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
 
         //blob 삭제
         blobClient.deleteIfExists();
-        azureRepository.deleteImage(blobname);
+        azureRepository.deleteImage(blobName);
         return null;
     }
 
     @Override
-    public String findByBlobName(String userId, String blobName) {
+    public String findByBlobName(String id, String blobName) {
 
-        BlobContainerClient blobContainerClient = makeBlobContainerClient(userId);
+        BlobContainerClient blobContainerClient = makeBlobContainerClient(id);
 
         for (BlobItem blobItem : blobContainerClient.listBlobs()) {
             if (blobName.equals(blobItem.getName())) {
@@ -196,21 +195,8 @@ public class AzureServiceImpl implements AzureService{
     }
     private BlobContainerClient makeBlobContainerClient(String containerName){
         return new BlobContainerClientBuilder()
-                .connectionString("DefaultEndpointsProtocol=https;AccountName=eyetiststorage;AccountKey=GS/r8XlAh96ulBFtlicC+FYL+IQXOKksbLcvphHfN2ti1pVZn/4tJCpRoAGDWWXD+9/WwOVaIc9Z+AStQiCrZw==;EndpointSuffix=core.windows.net")
+                .connectionString(CONNECT_STRING)
                 .containerName(containerName)
                 .buildClient();
     }
 }
-/**
- Map<String, String> tags = new HashMap<String, String>();
- tags.put("title", imageTitle);
- tags.put("Content", "image");
- tags.put("Date", String.valueOf(LocalDate.now()));
- blobClient.setTags(tags);
-
- String query = "&where=title='iopp3423'";
-
- blobContainerClient.findBlobsByTags(query)
- .forEach(blob -> System.out.printf("Name: %s%n", blob.getName()));
- *
- */

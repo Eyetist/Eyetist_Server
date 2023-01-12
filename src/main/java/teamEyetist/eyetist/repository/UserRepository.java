@@ -9,7 +9,7 @@ public interface UserRepository {
 
     public String save(User user);
     public Optional<User> find(String id);
-    public List<User> login(String id, String password);
+    public String login(String id, String password);
     public void modify();
     public void delete();
 }

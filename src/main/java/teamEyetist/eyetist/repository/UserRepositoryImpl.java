@@ -23,7 +23,7 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public String save(User user) {
         em.persist(user);
-        return "회원가입이 완료되었습니다.";
+        return "200";
     }
 
     @Override
@@ -32,18 +32,20 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> login(String id, String password) {
+    public String login(String id, String password) {
         List<User> users = em.createQuery("SELECT u FROM User u where u.id = :id AND u.password = :password")
                 .setParameter("id", id)
                 .setParameter("password", password)
                 .getResultList();
-        /**
-         * if (users.isEmpty()){
-         *             System.out.println("asdasd");
-         *         }
-         *         else System.out.println("hello = ");
-         */
-        return users;
+
+          if (users.isEmpty()){
+              System.out.println("회원이 없음 == 로그인 실패");
+              return "400";
+          }
+          else {
+              System.out.println("회원 == 로그인");
+              return "200";
+          }
     }
 
     @Override
