@@ -110,6 +110,10 @@ public class AzureServiceImpl implements AzureService{
         return azureRepository.readPublicImageList(visibility, page);
     }
 
+    /**
+     * 퍼블릭 이미지 수 반환
+     * @return
+     */
     @Override
     public Long imageCount() {
         return azureRepository.imageCount();

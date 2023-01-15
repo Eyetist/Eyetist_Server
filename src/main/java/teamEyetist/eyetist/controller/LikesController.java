@@ -25,7 +25,7 @@ public class LikesController {
     public void storeOrRemoveHeart(@RequestParam String blobName, @RequestParam String member, @RequestParam String heart){
         String likes = likesService.receiveHeart(blobName, member, heart);
         if(likes.equals("add")){
-            azureService.
+
         }
         else{
 
