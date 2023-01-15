@@ -4,16 +4,18 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Component
 @Getter
 @Setter
 public class Likes {
-    @Id
+
+    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "number", nullable = false)
+    private Long number;
+
     @Column(name = "blobName", nullable = false)
     private String blobName;
 

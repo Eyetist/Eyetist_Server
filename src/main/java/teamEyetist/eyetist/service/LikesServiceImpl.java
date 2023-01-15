@@ -19,7 +19,7 @@ public class LikesServiceImpl implements LikesService{
 
     public String receiveHeart(String blobName, String member, String heart){
         return likesRepository.receiveHeart(blobName, member, heart);
-    };
+    }
 
     public List<Likes> getLikesList(String member){
         return likesRepository.getLikesList(member);

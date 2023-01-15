@@ -6,7 +6,9 @@ import org.springframework.core.io.Resource;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import teamEyetist.eyetist.domain.Azure;
+import teamEyetist.eyetist.domain.Likes;
 import teamEyetist.eyetist.service.AzureService;
+import teamEyetist.eyetist.service.LikesService;
 
 import java.io.File;
 import java.io.IOException;
@@ -46,8 +48,8 @@ public class BlobController{
      * 퍼블릭 이미지 가져오는 코드(완료)
      */
     @GetMapping("/publicImage")
-    public List<Azure> readPublicImageList(@RequestParam String visibility, @RequestParam int page){
-        return azureService.readPublicImageList(visibility, page);
+    public List<Azure> readPublicImageList(@RequestParam String visibility, @RequestParam int page, @RequestParam String member){
+        return azureService.readPublicImageList(visibility, page, member);
     }
     /**
      * 전체 이미지 수 조회

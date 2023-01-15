@@ -1,5 +1,6 @@
 package teamEyetist.eyetist.controller;
 
+import com.nimbusds.jose.shaded.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import teamEyetist.eyetist.domain.Likes;
@@ -25,15 +26,16 @@ public class LikesController {
     public void storeOrRemoveHeart(@RequestParam String blobName, @RequestParam String member, @RequestParam String heart){
         String likes = likesService.receiveHeart(blobName, member, heart);
         if(likes.equals("add")){
-
+            azureService.increaseLikes(blobName);
         }
         else{
-
+            azureService.decreaseLikes(blobName);
         }
     }
 
     @GetMapping("/getList")
     public List<Likes> getLikesList(String member){
+        List<Likes> likes = likesService.getLikesList(member);
         return likesService.getLikesList(member);
     }
 }

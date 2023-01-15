@@ -33,12 +33,16 @@ public class AzureRepositoryImpl implements AzureRepository{
     }
 
     @Override
-    public String findImage(String member, String blobName) {
-        Azure result = em.createQuery("SELECT I FROM Azure I where I.member = :member AND I.blobName = :blobName",  Azure.class)
-                .setParameter("member", member)
+    public void increaseLikes(String blobName) {
+        em.createQuery("UPDATE Azure A SET A.likes = A.likes + 1 WHERE A.blobName = : blobName")
                 .setParameter("blobName", blobName)
-                .getSingleResult();
-        return null;
+                .executeUpdate();
+    }
+    @Override
+    public void decreaseLikes(String blobName) {
+        em.createQuery("UPDATE Azure A SET A.likes = A.likes - 1 WHERE A.blobName = : blobName")
+                .setParameter("blobName", blobName)
+                .executeUpdate();
     }
 
     /**
@@ -65,7 +69,7 @@ public class AzureRepositoryImpl implements AzureRepository{
      * 공개된 사진 리스트들 가져오드
      */
     @Override
-    public List<Azure> readPublicImageList(String visibility, int page) {
+    public List<Azure> readPublicImageList(String visibility, int page, String member) {
         List<Azure> resultList = em.createQuery("SELECT A FROM Azure A where A.visibility = :visibility order by A.date asc", Azure.class)
                 .setParameter("visibility", visibility)
                 .setFirstResult(page*10)   //시작 위치 지정

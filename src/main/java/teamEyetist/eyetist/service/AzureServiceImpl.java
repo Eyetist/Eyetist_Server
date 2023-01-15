@@ -106,8 +106,8 @@ public class AzureServiceImpl implements AzureService{
      * 공개된 사진 리스트 가져오는 코드
      */
     @Override
-    public List<Azure> readPublicImageList(String visibility, int page) {
-        return azureRepository.readPublicImageList(visibility, page);
+    public List<Azure> readPublicImageList(String visibility, int page, String member) {
+        return azureRepository.readPublicImageList(visibility, page, member);
     }
 
     /**
@@ -117,6 +117,15 @@ public class AzureServiceImpl implements AzureService{
     @Override
     public Long imageCount() {
         return azureRepository.imageCount();
+    }
+
+    @Override
+    public void increaseLikes(String blobName) {
+        azureRepository.increaseLikes(blobName);
+    }
+    @Override
+    public void decreaseLikes(String blobName) {
+        azureRepository.decreaseLikes(blobName);
     }
 
     /**

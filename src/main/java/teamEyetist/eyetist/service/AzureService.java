@@ -11,10 +11,12 @@ import java.util.List;
 
 public interface AzureService {
     public String storeImage(String file, String member, String blobName, Long like, String set) throws IOException;
-    public Azure readImage(String blobname);
+    public Azure readImage(String blobName);
     public List<Azure> readImageList(String containerName);
-    public List<Azure> readPublicImageList(String visibility, int page);
+    public List<Azure> readPublicImageList(String visibility, int page, String member);
     public Long imageCount();
+    public void increaseLikes(String blobName);
+    public void decreaseLikes(String blobName);
     public String deleteContainer(String containerName);
     public String deleteBlob(String userId, String blobName);
     public String findByBlobName(String containerName, String blobName);

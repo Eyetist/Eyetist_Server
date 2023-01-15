@@ -6,9 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Component
