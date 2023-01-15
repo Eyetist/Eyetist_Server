@@ -75,9 +75,15 @@ public class AzureRepositoryImpl implements AzureRepository{
         return resultList;
     }
 
+    /**
+     * 퍼블릭 이미지 수 세기
+     * @return
+     */
     @Override
     public Long imageCount() {
-        Long result = em.createQuery("select count(A) from Azure A", Long.class).getSingleResult();
+        Long result = em.createQuery("select count(A) from Azure A where A.visibility = :visibility", Long.class)
+                .setParameter("visibility", "public")
+                .getSingleResult();
         return result;
     }
 

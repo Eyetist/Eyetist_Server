@@ -3,6 +3,7 @@ package teamEyetist.eyetist.domain;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.stereotype.Component;
 
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.Id;
 @Component
 @Getter
 @Setter
+@DynamicUpdate
 public class Azure {
 
     @Column(name = "member", nullable = false)

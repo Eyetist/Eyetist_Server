@@ -22,14 +22,16 @@ public class LikesRepositoryImpl implements LikesRepository{
     }
 
     @Override
-    public void receiveHeart(String blobName, String member, String heart) {
+    public String receiveHeart(String blobName, String member, String heart) {
 
         if(heart.equals("0")){ // 좋아요 없을 때
             storeHeart(blobName, member);
+            return "add";
         }
 
         else{ // 좋아요 있을 때
             deleteHeart(blobName);
+            return "minus";
         }
     }
 
