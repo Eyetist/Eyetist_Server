@@ -75,8 +75,9 @@ public class AzureServiceImpl implements AzureService{
             ex.printStackTrace();
         }
 
+        Date today = new Date();
         //객체 생성
-        Azure azure = new Azure(member, blobName, title, blobClient.getBlobUrl(), likes, visibility);
+        Azure azure = new Azure(member, blobName, title, blobClient.getBlobUrl(), likes, visibility, today.toString());
 
         //db에 저장
         azureRepository.storeImage(azure);
@@ -107,6 +108,11 @@ public class AzureServiceImpl implements AzureService{
     @Override
     public List<Azure> readPublicImageList(String visibility, int page) {
         return azureRepository.readPublicImageList(visibility, page);
+    }
+
+    @Override
+    public Long imageCount() {
+        return azureRepository.imageCount();
     }
 
     /**
@@ -168,8 +174,10 @@ public class AzureServiceImpl implements AzureService{
         //Azure 컨테이너 퍼블릭 읽기권한으로 변경
         readPermissionChange(blobContainerClient);
 
+        Date today = new Date();
+
         //객체 생성
-        Azure azure = new Azure(member, blobName, title, blobClient.getBlobUrl(), likes, set);
+        Azure azure = new Azure(member, blobName, title, blobClient.getBlobUrl(), likes, set, today.toString());
 
         //db에 저장
         azureRepository.storeImage(azure);

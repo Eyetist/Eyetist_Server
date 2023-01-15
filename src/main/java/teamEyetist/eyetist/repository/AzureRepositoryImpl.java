@@ -67,11 +67,18 @@ public class AzureRepositoryImpl implements AzureRepository{
     @Override
     public List<Azure> readPublicImageList(String visibility, int page) {
         List<Azure> resultList = em.createQuery("SELECT I FROM Azure I where I.visibility = :visibility", Azure.class)
+                .setParameter("visibility", visibility)
                 .setFirstResult(page*10)   //시작 위치 지정
                 .setMaxResults(10) //조회할 데이터 개수 지정
                 .getResultList();
 
         return resultList;
+    }
+
+    @Override
+    public Long imageCount() {
+        Long result = em.createQuery("select count(A) from Azure A", Long.class).getSingleResult();
+        return result;
     }
 
     @Override

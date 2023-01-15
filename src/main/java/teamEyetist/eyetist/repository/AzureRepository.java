@@ -11,6 +11,7 @@ public interface AzureRepository {
     public Azure readImage(String blobName);
     public List<Azure> readImageList(String id);
     public List<Azure> readPublicImageList(String visibility, int page);
+    public Long imageCount();
     public String findImage(String imageName, String id);
     public String deleteUserStore();
     public String deleteImage(String blobName);
