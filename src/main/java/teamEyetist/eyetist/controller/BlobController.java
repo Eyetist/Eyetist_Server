@@ -1,16 +1,11 @@
 package teamEyetist.eyetist.controller;
 
-import com.nimbusds.jose.shaded.json.JSONObject;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
+import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import teamEyetist.eyetist.domain.Azure;
-import teamEyetist.eyetist.domain.Likes;
+import teamEyetist.eyetist.domain.AzureDTO;
 import teamEyetist.eyetist.service.AzureService;
-import teamEyetist.eyetist.service.LikesService;
-
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -27,14 +22,14 @@ public class BlobController{
      * 한 회원이 선택한 이미지 가져오는 코드(완료)
      */
     @PostMapping("/getImage")
-    public Azure readImage(@RequestParam String blobName){
-        return azureService.readImage(blobName);
+    public Azure readImage(@RequestParam String azureBlobName){
+        return azureService.readImage(azureBlobName);
     }
     /**
      * 한 회원의 이미지 리스트 가져오는 코드(완료)
      */
     @PostMapping("/getImageList")
-    List<Azure> getImageList(@RequestParam String member){
+    List<AzureDTO> getImageList(@RequestParam String member){
         return azureService.readImageList(member);
     }
     /**
@@ -48,7 +43,7 @@ public class BlobController{
      * 퍼블릭 이미지 가져오는 코드(완료)
      */
     @GetMapping("/publicImage")
-    public List<Azure> readPublicImageList(@RequestParam String visibility, @RequestParam int page, @RequestParam String member){
+    public List<AzureDTO> readPublicImageList(@RequestParam String visibility, @RequestParam int page, @RequestParam String member){
         return azureService.readPublicImageList(visibility, page, member);
     }
     /**
@@ -71,8 +66,8 @@ public class BlobController{
      * blob지우는 거 -> 회원에 저장된 사진 중 한 개 지울 때 사용(완료)
      */
     @PostMapping("/deleteImage")
-    public void deleteUserImage(@RequestParam String member, @RequestParam String blobName) {
-        azureService.deleteBlob(member, blobName);
+    public void deleteUserImage(@RequestParam String member, @RequestParam String azureBlobName) {
+        azureService.deleteBlob(member, azureBlobName);
     }
 
     /**

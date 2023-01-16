@@ -23,13 +23,14 @@ public class LikesController {
     }
 
     @PostMapping("/store")
-    public void storeOrRemoveHeart(@RequestParam String blobName, @RequestParam String member, @RequestParam String heart){
-        String likes = likesService.receiveHeart(blobName, member, heart);
+    public void storeOrRemoveHeart(@RequestParam String likesBlobName, @RequestParam String member, @RequestParam String heart){
+        String likes = likesService.receiveHeart(likesBlobName, member, heart);
+        System.out.println(likes);
         if(likes.equals("add")){
-            azureService.increaseLikes(blobName);
+            azureService.increaseLikes(likesBlobName);
         }
         else{
-            azureService.decreaseLikes(blobName);
+            azureService.decreaseLikes(likesBlobName);
         }
     }
 

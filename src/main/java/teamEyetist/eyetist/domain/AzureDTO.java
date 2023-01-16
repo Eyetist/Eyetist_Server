@@ -1,22 +1,18 @@
 package teamEyetist.eyetist.domain;
 
-
-import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.stereotype.Component;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
 
 @Entity
 @Component
 @Getter
 @Setter
-@Builder
-@DynamicUpdate
-public class Azure {
-
+public class AzureDTO {
     @Column(name = "member", nullable = false)
     private String member;
 
@@ -39,17 +35,9 @@ public class Azure {
     @Column(name = "date", nullable = false)
     private String date;
 
-    public Azure() {
+    @Column(name = "likesBlobName", nullable = false)
+    private String likesBlobName;
 
-    }
-
-    public Azure(String member, String azureBlobName, String title, String link, Long likes, String visibility, String date) {
-        this.member = member;
-        this.azureBlobName = azureBlobName;
-        this.title = title;
-        this.link = link;
-        this.likes = likes;
-        this.visibility = visibility;
-        this.date = date;
-    }
+    @Column(name = "heart", nullable = false)
+    private String heart;
 }

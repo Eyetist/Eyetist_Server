@@ -17,8 +17,8 @@ public class LikesServiceImpl implements LikesService{
         this.likesRepository = likesRepository;
     }
 
-    public String receiveHeart(String blobName, String member, String heart){
-        return likesRepository.receiveHeart(blobName, member, heart);
+    public String receiveHeart(String likesBlobName, String member, String heart){
+        return likesRepository.receiveHeart(likesBlobName, member, heart);
     }
 
     public List<Likes> getLikesList(String member){

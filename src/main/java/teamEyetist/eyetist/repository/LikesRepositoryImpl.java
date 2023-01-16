@@ -22,15 +22,15 @@ public class LikesRepositoryImpl implements LikesRepository{
     }
 
     @Override
-    public String receiveHeart(String blobName, String member, String heart) {
+    public String receiveHeart(String likesBlobName, String member, String heart) {
 
         if(heart.equals("0")){ // 좋아요 없을 때
-            storeHeart(blobName, member);
+            storeHeart(likesBlobName, member);
             return "add";
         }
 
         else{ // 좋아요 있을 때
-            deleteHeart(blobName);
+            deleteHeart(likesBlobName, member);
             return "minus";
         }
     }
@@ -44,13 +44,16 @@ public class LikesRepositoryImpl implements LikesRepository{
     }
 
     @Override
-    public void storeHeart(String blobName, String member) {
-        Likes like = new Likes(blobName, member, "1");
+    public void storeHeart(String likesBlobName, String member) {
+        Likes like = new Likes(likesBlobName, member, "1");
         em.persist(like);
     }
 
     @Override
-    public void deleteHeart(String blobName) {
-        em.remove(em.find(Likes.class, blobName));  // 트랜젝션 커밋시 반영됨.
+    public void deleteHeart(String likesBlobName, String member) {
+        em.createQuery("DELETE FROM Likes L where L.likesBlobName = :likesBlobName AND L.member = :member")
+                .setParameter("likesBlobName", likesBlobName)
+                .setParameter("member", member)
+                .executeUpdate();
     }
 }

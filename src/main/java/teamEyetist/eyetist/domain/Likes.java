@@ -16,8 +16,8 @@ public class Likes {
     @Column(name = "number", nullable = false)
     private Long number;
 
-    @Column(name = "blobName", nullable = false)
-    private String blobName;
+    @Column(name = "likesBlobName", nullable = false)
+    private String likesBlobName;
 
     @Column(name = "member", nullable = false)
     private String member;
@@ -29,8 +29,8 @@ public class Likes {
 
     }
 
-    public Likes(String blobName, String member, String heart) {
-        this.blobName = blobName;
+    public Likes(String likesBlobName, String member, String heart) {
+        this.likesBlobName = likesBlobName;
         this.member = member;
         this.heart = heart;
     }

@@ -4,11 +4,13 @@ import com.azure.identity.*;
 import com.azure.storage.blob.*;
 import com.azure.storage.blob.models.*;
 import com.azure.storage.blob.models.BlobItem;
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import teamEyetist.eyetist.domain.Azure;
+import teamEyetist.eyetist.domain.AzureDTO;
 import teamEyetist.eyetist.repository.AzureRepository;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -51,9 +53,9 @@ public class AzureServiceImpl implements AzureService{
         BlobContainerClient blobContainerClient = makeBlobContainerClient(member);
 
         // 파일 객체의 파일을 Blob 컨테이너에 할당
-        String blobName = UUID.randomUUID().toString();
+        String azureBlobName = UUID.randomUUID().toString();
 
-        BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
+        BlobClient blobClient = blobContainerClient.getBlobClient(azureBlobName);
 
 
         String data = file.split(",")[1];
@@ -77,7 +79,7 @@ public class AzureServiceImpl implements AzureService{
 
         Date today = new Date();
         //객체 생성
-        Azure azure = new Azure(member, blobName, title, blobClient.getBlobUrl(), likes, visibility, today.toString());
+        Azure azure = new Azure(member, azureBlobName, title, blobClient.getBlobUrl(), likes, visibility, today.toString());
 
         //db에 저장
         azureRepository.storeImage(azure);
@@ -90,15 +92,15 @@ public class AzureServiceImpl implements AzureService{
      * 회원의 저장된 그림 이미지 한 개 가져오는 코드
      */
     @Override
-    public Azure readImage(String blobName){
-        return azureRepository.readImage(blobName);
+    public Azure readImage(String azureBlobName){
+        return azureRepository.readImage(azureBlobName);
     }
 
     /**
      * 한 회원의 이미지 리스트 가져오는 코드
      */
     @Override
-    public List<Azure> readImageList(String userId) {
+    public List<AzureDTO> readImageList(String userId) {
         return azureRepository.readImageList(userId);
     }
 
@@ -106,7 +108,7 @@ public class AzureServiceImpl implements AzureService{
      * 공개된 사진 리스트 가져오는 코드
      */
     @Override
-    public List<Azure> readPublicImageList(String visibility, int page, String member) {
+    public List<AzureDTO> readPublicImageList(String visibility, int page, String member) {
         return azureRepository.readPublicImageList(visibility, page, member);
     }
 
@@ -120,12 +122,12 @@ public class AzureServiceImpl implements AzureService{
     }
 
     @Override
-    public void increaseLikes(String blobName) {
-        azureRepository.increaseLikes(blobName);
+    public void increaseLikes(String azureBlobName) {
+        azureRepository.increaseLikes(azureBlobName);
     }
     @Override
-    public void decreaseLikes(String blobName) {
-        azureRepository.decreaseLikes(blobName);
+    public void decreaseLikes(String azureBlobName) {
+        azureRepository.decreaseLikes(azureBlobName);
     }
 
     /**
@@ -142,25 +144,25 @@ public class AzureServiceImpl implements AzureService{
      * 이미지 지우는 코드
      */
     @Override
-    public String deleteBlob(String id, String blobName) {
+    public String deleteBlob(String id, String azureBlobName) {
         // blobContainerClient 생성
         BlobContainerClient blobContainerClient = makeBlobContainerClient(id);
         // 파일 객체의 파일을 Blob 컨테이너에 할당
-        BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
+        BlobClient blobClient = blobContainerClient.getBlobClient(azureBlobName);
 
         //blob 삭제
         blobClient.deleteIfExists();
-        azureRepository.deleteImage(blobName);
+        azureRepository.deleteImage(azureBlobName);
         return null;
     }
 
     @Override
-    public String findByBlobName(String id, String blobName) {
+    public String findByBlobName(String id, String azureBlobName) {
 
         BlobContainerClient blobContainerClient = makeBlobContainerClient(id);
 
         for (BlobItem blobItem : blobContainerClient.listBlobs()) {
-            if (blobName.equals(blobItem.getName())) {
+            if (azureBlobName.equals(blobItem.getName())) {
                 // 현재 중복되는 사진 이름이 있음
                 return "200";
             }
@@ -176,9 +178,9 @@ public class AzureServiceImpl implements AzureService{
         // blobContainerClient 생성
         BlobContainerClient blobContainerClient = makeBlobContainerClient(member);
         // 파일 객체의 파일을 Blob 컨테이너에 할당
-        String blobName = UUID.randomUUID().toString();
+        String azureBlobName = UUID.randomUUID().toString();
 
-        BlobClient blobClient = blobContainerClient.getBlobClient(blobName);
+        BlobClient blobClient = blobContainerClient.getBlobClient(azureBlobName);
 
         blobClient.upload(file.getInputStream());
         //blob 이미지 content-type -> image/png로 변경
@@ -190,7 +192,7 @@ public class AzureServiceImpl implements AzureService{
         Date today = new Date();
 
         //객체 생성
-        Azure azure = new Azure(member, blobName, title, blobClient.getBlobUrl(), likes, set, today.toString());
+        Azure azure = new Azure(member, azureBlobName, title, blobClient.getBlobUrl(), likes, set, today.toString());
 
         //db에 저장
         azureRepository.storeImage(azure);
