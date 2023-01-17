@@ -72,7 +72,7 @@ public class AzureRepositoryImpl implements AzureRepository{
      */
     @Override
     public List<AzureDTO> readPublicImageList(String visibility, int page, String member) {
-        List<AzureDTO> result = em.createNativeQuery("SELECT * from Azure AS A LEFT JOIN (SELECT L.likesBlobName, L.heart from Likes L WHERE L.member = :member) AS B ON A.azureBlobName = B.LblobName WHERE A.visibility = :visibility", AzureDTO.class)
+        List<AzureDTO> result = em.createNativeQuery("SELECT * from Azure AS A LEFT JOIN (SELECT L.likesBlobName, L.heart from Likes L WHERE L.member = :member) AS B ON A.azureBlobName = B.likesBlobName WHERE A.visibility = :visibility", AzureDTO.class)
                 .setParameter("visibility", visibility)
                 .setParameter("member", member)
                 .setFirstResult(page * 10)   //시작 위치 지정
