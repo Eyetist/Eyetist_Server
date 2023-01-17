@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import teamEyetist.eyetist.domain.Azure;
+import teamEyetist.eyetist.domain.AzureDTO;
 import teamEyetist.eyetist.domain.Likes;
 
 import javax.persistence.EntityManager;

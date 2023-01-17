@@ -3,11 +3,13 @@ package teamEyetist.eyetist.controller;
 import com.nimbusds.jose.shaded.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import teamEyetist.eyetist.domain.AzureDTO;
 import teamEyetist.eyetist.domain.Likes;
 import teamEyetist.eyetist.service.AzureService;
 import teamEyetist.eyetist.service.LikesService;
 import teamEyetist.eyetist.service.LikesServiceImpl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController

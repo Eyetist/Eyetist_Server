@@ -14,6 +14,7 @@ public interface AzureRepository {
     public Long imageCount();
     public void increaseLikes(String blobName);
     public void decreaseLikes(String blobName);
-    public String deleteUserStore();
     public String deleteImage(String blobName);
+    public List<AzureDTO> weeklyHeart(String visibility, int page, String member);
+    public List<AzureDTO> topHeart(String visibility, int page, String member);
 }

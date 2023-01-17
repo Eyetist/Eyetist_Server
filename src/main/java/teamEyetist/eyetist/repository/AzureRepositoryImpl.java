@@ -32,13 +32,13 @@ public class AzureRepositoryImpl implements AzureRepository{
 
     @Override
     public void increaseLikes(String azureBlobName) {
-        em.createQuery("UPDATE Azure A SET A.likes = A.likes + 1 WHERE A.azureBlobName = : azureBlobName")
+        em.createQuery("UPDATE Azure A SET A.likes = A.likes + 1, A.weekly = A.weekly + 1 WHERE A.azureBlobName = : azureBlobName")
                 .setParameter("azureBlobName", azureBlobName)
                 .executeUpdate();
     }
     @Override
     public void decreaseLikes(String azureBlobName) {
-        em.createQuery("UPDATE Azure A SET A.likes = A.likes - 1 WHERE A.azureBlobName = : azureBlobName")
+        em.createQuery("UPDATE Azure A SET A.likes = A.likes - 1, A.weekly = A.weekly - 1 WHERE A.azureBlobName = : azureBlobName")
                 .setParameter("azureBlobName", azureBlobName)
                 .executeUpdate();
     }
@@ -57,10 +57,6 @@ public class AzureRepositoryImpl implements AzureRepository{
      */
     @Override
     public List<AzureDTO> readImageList(String member) {
-        List<Azure> resultList = em.createQuery("SELECT I FROM Azure I where I.member = :member", Azure.class)
-                .setParameter("member", member)
-                .getResultList();
-
         List<AzureDTO> result = em.createNativeQuery("SELECT * from Azure AS A LEFT JOIN (SELECT L.likesBlobName, L.heart from Likes L WHERE L.member = :member) AS B ON A.azureBlobName = B.likesBlobName WHERE A.member = :member", AzureDTO.class)
                 .setParameter("member", member)
                 .getResultList();
@@ -94,11 +90,6 @@ public class AzureRepositoryImpl implements AzureRepository{
         return result;
     }
 
-    @Override
-    public String deleteUserStore() {
-        return null;
-    }
-
     /**
      * 이미지 삭제하는 코드
      */
@@ -106,5 +97,35 @@ public class AzureRepositoryImpl implements AzureRepository{
     public String deleteImage(String azureBlobName) {
         em.remove(em.find(Azure.class, azureBlobName));
         return null;
+    }
+
+    /**
+     * 주간 인기 게시물
+     */
+    @Override
+    public List<AzureDTO> weeklyHeart(String visibility, int page, String member) {
+        List<AzureDTO> result = em.createNativeQuery("SELECT * from Azure AS A LEFT JOIN (SELECT L.likesBlobName, L.heart from Likes L WHERE L.member = :member) AS B ON A.azureBlobName = B.likesBlobName WHERE A.visibility = :visibility ORDER BY A.weekly DESC", AzureDTO.class)
+                .setParameter("visibility", visibility)
+                .setParameter("member", member)
+                .setFirstResult(page * 10)   //시작 위치 지정
+                .setMaxResults(10) //조회할 데이터 개수 지정
+                .getResultList();
+
+        return result;
+    }
+
+    /**
+     * 누적 인기 게시물
+     */
+    @Override
+    public List<AzureDTO> topHeart(String visibility, int page, String member) {
+        List<AzureDTO> result = em.createNativeQuery("SELECT * from Azure AS A LEFT JOIN (SELECT L.likesBlobName, L.heart from Likes L WHERE L.member = :member) AS B ON A.azureBlobName = B.likesBlobName WHERE A.visibility = :visibility ORDER BY A.likes DESC", AzureDTO.class)
+                .setParameter("visibility", visibility)
+                .setParameter("member", member)
+                .setFirstResult(page * 10)   //시작 위치 지정
+                .setMaxResults(10) //조회할 데이터 개수 지정
+                .getResultList();
+
+        return result;
     }
 }

@@ -19,5 +19,7 @@ public interface AzureService {
     public String deleteContainer(String containerName);
     public String deleteBlob(String userId, String blobName);
     public String findByBlobName(String containerName, String blobName);
+    public List<AzureDTO> weeklyHeart(String visibility, int page, String member);
+    public List<AzureDTO> topHeart(String visibility, int page, String member);
     public String test(MultipartFile file, String member, String blobName, Long likes, String visibility) throws IOException;
 }

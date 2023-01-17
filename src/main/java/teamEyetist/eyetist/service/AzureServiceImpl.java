@@ -79,7 +79,7 @@ public class AzureServiceImpl implements AzureService{
 
         Date today = new Date();
         //객체 생성
-        Azure azure = new Azure(member, azureBlobName, title, blobClient.getBlobUrl(), likes, visibility, today.toString());
+        Azure azure = new Azure(member, azureBlobName, title, blobClient.getBlobUrl(), likes, visibility, today.toString(), 0L);
 
         //db에 저장
         azureRepository.storeImage(azure);
@@ -121,10 +121,16 @@ public class AzureServiceImpl implements AzureService{
         return azureRepository.imageCount();
     }
 
+    /**
+     * 좋아요 1 증가
+     */
     @Override
     public void increaseLikes(String azureBlobName) {
         azureRepository.increaseLikes(azureBlobName);
     }
+    /**
+     * 좋아요 1 감소
+     */
     @Override
     public void decreaseLikes(String azureBlobName) {
         azureRepository.decreaseLikes(azureBlobName);
@@ -156,6 +162,22 @@ public class AzureServiceImpl implements AzureService{
         return null;
     }
 
+    /**
+     * 주간 인기게시물 리턴
+     */
+    @Override
+    public List<AzureDTO> weeklyHeart(String visibility, int page, String member) {
+        return azureRepository.weeklyHeart(visibility, page, member);
+    }
+
+    /**
+     * 누적 인기 게시물
+     */
+    @Override
+    public List<AzureDTO> topHeart(String visibility, int page, String member) {
+        return azureRepository.topHeart(visibility, page, member);
+    }
+
     @Override
     public String findByBlobName(String id, String azureBlobName) {
 
@@ -173,32 +195,8 @@ public class AzureServiceImpl implements AzureService{
 
     @Override
     public String test(MultipartFile file, String member, String title, Long likes, String set) throws IOException {
-        // 컨테이너 존재하지 않으면 생성
-        blobServiceClient.createBlobContainerIfNotExists(member);
-        // blobContainerClient 생성
-        BlobContainerClient blobContainerClient = makeBlobContainerClient(member);
-        // 파일 객체의 파일을 Blob 컨테이너에 할당
-        String azureBlobName = UUID.randomUUID().toString();
-
-        BlobClient blobClient = blobContainerClient.getBlobClient(azureBlobName);
-
-        blobClient.upload(file.getInputStream());
-        //blob 이미지 content-type -> image/png로 변경
-        headerChange(blobClient);
-
-        //Azure 컨테이너 퍼블릭 읽기권한으로 변경
-        readPermissionChange(blobContainerClient);
-
-        Date today = new Date();
-
-        //객체 생성
-        Azure azure = new Azure(member, azureBlobName, title, blobClient.getBlobUrl(), likes, set, today.toString());
-
-        //db에 저장
-        azureRepository.storeImage(azure);
-
         // blob Url
-        return blobClient.getBlobUrl();
+        return "200";
     }
 
     private void headerChange(BlobClient blobClient){

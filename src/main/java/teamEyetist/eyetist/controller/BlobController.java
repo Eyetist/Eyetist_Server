@@ -7,6 +7,7 @@ import teamEyetist.eyetist.domain.Azure;
 import teamEyetist.eyetist.domain.AzureDTO;
 import teamEyetist.eyetist.service.AzureService;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -78,6 +79,21 @@ public class BlobController{
          return azureService.findByBlobName(member, imageTitle);
     }
 
+    /**
+     * 주간 좋아요 인기 게시물 보여주는거
+     */
+    @GetMapping("/getWeeklyLikes")
+    public List<AzureDTO> getList(String visibility, int page, String member){
+        return azureService.weeklyHeart(visibility, page, member);
+    }
+
+    /**
+     * 누적 좋아요 게시물
+     */
+    @GetMapping("/getTopLikes")
+    public List<AzureDTO> getTopList(String visibility, int page, String member){
+        return azureService.topHeart(visibility, page, member);
+    }
     @PostMapping("/test")
     public String test(@RequestParam MultipartFile file, @RequestParam String member, @RequestParam String title, @RequestParam Long likes, @RequestParam String visibility) throws IOException{
         return azureService.test(file, member, title, likes, visibility); // 이미지 url 리턴

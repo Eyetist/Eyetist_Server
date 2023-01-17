@@ -1,5 +1,6 @@
 package teamEyetist.eyetist.repository;
 
+import teamEyetist.eyetist.domain.AzureDTO;
 import teamEyetist.eyetist.domain.Likes;
 
 import java.util.List;

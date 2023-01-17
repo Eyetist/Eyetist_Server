@@ -35,6 +35,9 @@ public class AzureDTO {
     @Column(name = "date", nullable = false)
     private String date;
 
+    @Column(name = "weekly", nullable = false)
+    private Long weekly;
+
     @Column(name = "likesBlobName", nullable = false)
     private String likesBlobName;
 

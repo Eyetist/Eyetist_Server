@@ -2,6 +2,7 @@ package teamEyetist.eyetist.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import teamEyetist.eyetist.domain.AzureDTO;
 import teamEyetist.eyetist.domain.Likes;
 import teamEyetist.eyetist.repository.LikesRepository;
 
