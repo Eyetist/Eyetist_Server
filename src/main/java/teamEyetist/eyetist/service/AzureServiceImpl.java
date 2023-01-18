@@ -14,6 +14,7 @@ import teamEyetist.eyetist.domain.AzureDTO;
 import teamEyetist.eyetist.repository.AzureRepository;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static teamEyetist.eyetist.Constant.CONNECT_STRING;
@@ -57,7 +58,6 @@ public class AzureServiceImpl implements AzureService{
 
         BlobClient blobClient = blobContainerClient.getBlobClient(azureBlobName);
 
-
         String data = file.split(",")[1];
 
         byte[] binaryData = Base64.getDecoder().decode(data);
@@ -77,9 +77,11 @@ public class AzureServiceImpl implements AzureService{
             ex.printStackTrace();
         }
 
-        Date today = new Date();
+        SimpleDateFormat date = new SimpleDateFormat("yyyyMMdd");
+        String timeStamp = date.format(new Date());
+
         //객체 생성
-        Azure azure = new Azure(member, azureBlobName, title, blobClient.getBlobUrl(), likes, visibility, today.toString(), 0L);
+        Azure azure = new Azure(member, azureBlobName, title, blobClient.getBlobUrl(), likes, visibility, Long.parseLong(timeStamp), 0L);
 
         //db에 저장
         azureRepository.storeImage(azure);

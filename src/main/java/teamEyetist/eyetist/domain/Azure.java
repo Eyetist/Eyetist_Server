@@ -37,7 +37,7 @@ public class Azure {
     private String visibility;
 
     @Column(name = "date", nullable = false)
-    private String date;
+    private Long date;
 
     @Column(name = "weekly", nullable = false)
     private Long weekly;
@@ -46,7 +46,7 @@ public class Azure {
 
     }
 
-    public Azure(String member, String azureBlobName, String title, String link, Long likes, String visibility, String date,  Long weekly) {
+    public Azure(String member, String azureBlobName, String title, String link, Long likes, String visibility, Long date,  Long weekly) {
         this.member = member;
         this.azureBlobName = azureBlobName;
         this.title = title;
