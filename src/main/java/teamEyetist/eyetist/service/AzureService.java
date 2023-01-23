@@ -22,4 +22,6 @@ public interface AzureService {
     public List<AzureDTO> weeklyHeart(String visibility, int page, String member);
     public List<AzureDTO> topHeart(String visibility, int page, String member);
     public String test(MultipartFile file, String member, String blobName, Long likes, String visibility) throws IOException;
+    public String modify(String azureBlobName, String title, String visibility);
+    public String changeImage(String file, String azureBlobName, String member, String title, String visibility);
 }

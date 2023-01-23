@@ -17,4 +17,6 @@ public interface AzureRepository {
     public String deleteImage(String blobName);
     public List<AzureDTO> weeklyHeart(String visibility, int page, String member);
     public List<AzureDTO> topHeart(String visibility, int page, String member);
+    public String modify(String azureBlobName, String title, String visibility);
+    public String changeImage(String azureBlobName, String member, String title, String visibility);
 }

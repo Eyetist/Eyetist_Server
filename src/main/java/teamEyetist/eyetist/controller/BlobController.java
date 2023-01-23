@@ -1,13 +1,11 @@
 package teamEyetist.eyetist.controller;
 
-import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import teamEyetist.eyetist.domain.Azure;
 import teamEyetist.eyetist.domain.AzureDTO;
 import teamEyetist.eyetist.service.AzureService;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -93,6 +91,22 @@ public class BlobController{
     @GetMapping("/getTopLikes")
     public List<AzureDTO> getTopList(String visibility, int page, String member){
         return azureService.topHeart(visibility, page, member);
+    }
+
+    /**
+     * 그림 제목, 퍼블릭 수정
+     */
+    @PostMapping("/modify")
+    public String modify(@RequestParam String azureBlobName, @RequestParam String title, @RequestParam String visibility){
+        return azureService.modify(azureBlobName, title, visibility);
+    }
+
+    /**
+     * 이미지 덮어쓰기
+     */
+    @PostMapping("/change")
+    public String changeImage(@RequestParam String file, @RequestParam String azureBlobName, @RequestParam String member, @RequestParam String title, @RequestParam String visibility){
+        return azureService.changeImage(file, azureBlobName, member, title, visibility);
     }
     @PostMapping("/test")
     public String test(@RequestParam MultipartFile file, @RequestParam String member, @RequestParam String title, @RequestParam Long likes, @RequestParam String visibility) throws IOException{

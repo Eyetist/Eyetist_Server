@@ -128,4 +128,25 @@ public class AzureRepositoryImpl implements AzureRepository{
 
         return result;
     }
+
+    @Override
+    public String modify(String azureBlobName, String title, String visibility) {
+        em.createQuery("UPDATE Azure A SET A.title = : title, A.visibility = : visibility WHERE A.azureBlobName = : azureBlobName")
+                .setParameter("azureBlobName", azureBlobName)
+                .setParameter("title", title)
+                .setParameter("visibility", visibility)
+                .executeUpdate();
+        return "200";
+    }
+
+    @Override
+    public String changeImage(String azureBlobName, String member, String title, String visibility) {
+        em.createQuery("UPDATE Azure A SET A.title = : title, A.visibility = : visibility WHERE A.azureBlobName = : azureBlobName AND A.member = : member")
+                .setParameter("azureBlobName", azureBlobName)
+                .setParameter("title", title)
+                .setParameter("visibility", visibility)
+                .setParameter("member", member)
+                .executeUpdate();
+        return "200";
+    }
 }

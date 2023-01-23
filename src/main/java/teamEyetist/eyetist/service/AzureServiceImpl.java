@@ -87,7 +87,7 @@ public class AzureServiceImpl implements AzureService{
         azureRepository.storeImage(azure);
 
         // blob Url
-        return blobClient.getBlobUrl();
+        return blobClient.getBlobName();
     }
 
     /**
@@ -193,6 +193,45 @@ public class AzureServiceImpl implements AzureService{
         }
         // 현재 중복되는 사진 이름이 없음
         return "400";
+    }
+
+    @Override
+    public String modify(String azureBlobName, String title, String visibility) {
+        return azureRepository.modify(azureBlobName, title, visibility);
+    }
+
+    @Override
+    public String changeImage(String file, String azureBlobName, String member, String title, String visibility) {
+
+        // blobContainerClient 생성
+        BlobContainerClient blobContainerClient = makeBlobContainerClient(member);
+
+        BlobClient blobClient = blobContainerClient.getBlobClient(azureBlobName);
+
+        String data = file.split(",")[1];
+
+        byte[] binaryData = Base64.getDecoder().decode(data);
+
+        try (ByteArrayInputStream dataStream = new ByteArrayInputStream(binaryData)) {
+
+            //이미지 Azure에 업로드
+            blobClient.upload(dataStream);
+
+            //blob 이미지 content-type -> image/png로 변경
+            headerChange(blobClient);
+
+            //Azure 컨테이너 퍼블릭 읽기권한으로 변경
+            readPermissionChange(blobContainerClient);
+
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        //db에 저장
+        azureRepository.changeImage(azureBlobName, member, title, visibility);
+
+        // blob Url
+        return blobClient.getBlobName();
     }
 
     @Override
