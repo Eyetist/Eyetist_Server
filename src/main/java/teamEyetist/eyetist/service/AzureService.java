@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface AzureService {
     public String storeImage(String file, String member, String blobName, Long like, String set) throws IOException;
-    public Azure readImage(String blobName);
+    public JSONObject readImage(String blobName);
     public List<AzureDTO> readImageList(String containerName);
     public List<AzureDTO> readPublicImageList(String visibility, int page, String member);
     public Long imageCount();

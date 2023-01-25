@@ -94,8 +94,31 @@ public class AzureServiceImpl implements AzureService{
      * 회원의 저장된 그림 이미지 한 개 가져오는 코드
      */
     @Override
-    public Azure readImage(String azureBlobName){
-        return azureRepository.readImage(azureBlobName);
+    public JSONObject readImage(String azureBlobName){
+        Azure azure = azureRepository.readImage(azureBlobName);
+
+        // blobContainerClient 생성
+        BlobContainerClient blobContainerClient = makeBlobContainerClient(azure.getMember());
+
+        BlobClient blobClient = blobContainerClient.getBlobClient(azureBlobName);
+
+        byte[] binaryData = blobClient.downloadContent().toBytes();
+
+        String base = new String(Base64.getEncoder().encode(binaryData));
+
+        System.out.println(base);
+        JSONObject jsonObject  = new JSONObject();
+
+            jsonObject.put("member", azure.getMember());
+            jsonObject.put("azureBlobName", azure.getAzureBlobName());
+            jsonObject.put("title", azure.getTitle());
+            jsonObject.put("link", "data:image/png;base64," + base);
+            jsonObject.put("likes", azure.getLikes());
+            jsonObject.put("visibility", azure.getVisibility());
+            jsonObject.put("date", azure.getDate());
+            jsonObject.put("weekly", azure.getWeekly());
+
+        return jsonObject;
     }
 
     /**

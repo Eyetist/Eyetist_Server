@@ -1,5 +1,6 @@
 package teamEyetist.eyetist.controller;
 
+import net.minidev.json.JSONObject;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import teamEyetist.eyetist.domain.Azure;
@@ -21,7 +22,7 @@ public class BlobController{
      * 한 회원이 선택한 이미지 가져오는 코드(완료)
      */
     @PostMapping("/getImage")
-    public Azure readImage(@RequestParam String azureBlobName){
+    public JSONObject readImage(@RequestParam String azureBlobName){
         return azureService.readImage(azureBlobName);
     }
     /**
